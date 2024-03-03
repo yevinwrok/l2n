@@ -3,12 +3,13 @@
   import routes from "./router/index";
   import Layout from "./components/layout.svelte";
   import { location } from "svelte-spa-router";
-  import { share } from "./router/index";
+  import { onlyMobile } from "./router/index";
   import { isMobile } from "./store";
-  let showLayout = Object.keys(share).findIndex((k) => k === $location) === -1;
+  let showLayout =
+    Object.keys(onlyMobile).findIndex((k) => k === $location) === -1;
   $: {
-    console.log("!$isMobile: ", $isMobile);
-    showLayout = Object.keys(share).findIndex((k) => k === $location) === -1;
+    showLayout =
+      Object.keys(onlyMobile).findIndex((k) => k === $location) === -1;
   }
 </script>
 
