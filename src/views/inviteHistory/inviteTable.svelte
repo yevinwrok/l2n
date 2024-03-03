@@ -1,45 +1,23 @@
 <script lang="ts">
   import Col from "../../components/col.svelte";
   import Row from "../../components/row.svelte";
-  let active: "left" | "right" = "left";
-
-  let headerConfig = [
-    {
-      name: "用户",
-      span: 2,
-    },
-    {
-      name: "身份",
-      span: 2,
-    },
-    {
-      name: "状态",
-      span: 2,
-    },
-    {
-      name: "时间",
-      span: 3,
-    },
-    {
-      name: "奖励金额",
-      span: 3,
-    },
-  ];
+  import { tableConfig, tableType } from "./helper";
+  let active: tableType = tableType.left;
 </script>
 
 <div class="table_tab">
   <div class="table_tab_active {active}"></div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
-    class="table_tab_left {active === 'left' && 'active'}"
-    on:click={() => (active = "left")}
+    class="table_tab_left {active === tableType.left && 'active'}"
+    on:click={() => (active = tableType.left)}
   >
     已获得奖励￥430
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
-    class="table_tab_right {active === 'right' && 'active'}"
-    on:click={() => (active = "right")}
+    class="table_tab_right {active === tableType.right && 'active'}"
+    on:click={() => (active = tableType.right)}
   >
     奖励在路上
   </div>
@@ -47,14 +25,40 @@
 <div class="table">
   <div class="table_header">
     <Row>
-      {#each headerConfig as header}
-        <Col span={header.span}>{header.name}</Col>
+      {#each tableConfig[active] as header}
+        <Col span={header.span} right={header.right} center={header.center}
+          >{header.name}</Col
+        >
+      {/each}
+    </Row>
+  </div>
+  <div class="table_body">
+    <Row>
+      {#each tableConfig[active] as header}
+        <Col span={header.span} right={header.right} center={header.center}
+          >{header.name}</Col
+        >
       {/each}
     </Row>
   </div>
 </div>
 
 <style lang="scss">
+  .table {
+    padding: 0 3.3vw;
+    .table_header {
+      font-weight: bold;
+      font-size: 3.3vw;
+      color: #000000;
+      height: 11.6vw;
+      line-height: 11.6vw;
+    }
+    .table_body {
+      background: #ffffff;
+      font-size: 3.3vw;
+      color: #666666;
+    }
+  }
   .table_tab {
     width: 77vw;
     height: 9vw;
