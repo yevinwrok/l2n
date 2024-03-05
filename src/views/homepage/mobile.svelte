@@ -1,16 +1,27 @@
 <script lang="ts">
+  import { getContext } from "svelte";
   import { fly, fade } from "svelte/transition";
+  let theSecond: boolean = getContext("theSecond");
+  function assets(theSecond: boolean): string {
+    if (theSecond) {
+      return "_2";
+    } else {
+      return "";
+    }
+  }
 </script>
 
 <div class="mobile_homepage">
   <img
-    src="./assets/img_screen.png"
+    src="./assets/img_screen{assets(theSecond)}.png"
     alt=""
     class="mb_img_screen"
     in:fade={{ duration: 300, delay: 200 }}
   />
   <div class="mb" in:fly={{ y: 200, duration: 300, delay: 200 }}>
-    <div class="mb_title">在家享受按摩服务</div>
+    <div class="mb_title">
+      {theSecond ? "在家享受优质服务" : "在家享受按摩服务"}
+    </div>
     <img src="./assets/img_mb_service.png" alt="" class="mb_service" />
     <div class="mb_btn"><img src="./assets/icon_iOS.png" alt="" />iPhone版</div>
     <div class="mb_btn">
@@ -18,7 +29,7 @@
     </div>
     <div style="flex-grow: 1;">
       <img
-        src="./assets/img_mb_bottom_icon.png"
+        src="./assets/img_mb_bottom_icon{assets(theSecond)}.png"
         alt=""
         class="mb_bottom_icon"
         in:fade={{ duration: 300, delay: 200 }}
@@ -28,7 +39,7 @@
 </div>
 
 <style lang="scss">
-  .mobile_homepage{
+  .mobile_homepage {
     height: 90vh;
   }
   .mb_img_screen {

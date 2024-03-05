@@ -9,6 +9,7 @@
 <main>
   {#if !$isMobile}
     <nav class="nav">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <img
         src="./assets/logo.png"
         alt="logo"
@@ -25,9 +26,21 @@
         ><img src="./assets/icon_fast.png" alt="" /> 极速退款
       </span>
       <div class="filler"></div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+
       <div class="navBtn" on:click={() => navBtnClick("/")}>首页</div>
-      <div class="navBtn" on:click={() => navBtnClick("/agreement/terms")}>服务条款</div>
-      <div class="navBtn" on:click={() => navBtnClick("/agreement/privacy")}>隐私协议</div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div class="navBtn" on:click={() => navBtnClick("/agreement/terms")}>
+        服务条款
+      </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div class="navBtn" on:click={() => navBtnClick("/agreement/privacy")}>
+        隐私协议
+      </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div class="navBtn" on:click={() => navBtnClick("/agreement/duty")}>
+        责任说明
+      </div>
     </nav>
   {/if}
 </main>

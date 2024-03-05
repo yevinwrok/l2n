@@ -9,23 +9,49 @@
 <footer class={`footer ${$isMobile ? "mobile" : ""}`}>
   {#if $isMobile}
     <img src="./assets/img_bottom.png" alt="" class="img_bottom" />
+    <div class="footer_agreement">
+      <div class="footer_agreement_item" on:click={() => navBtnClick("terms")}>
+        服务条款
+      </div>
+      <div class="filler"></div>
+      <div
+        class="footer_agreement_item"
+        on:click={() => navBtnClick("privacy")}
+      >
+        隐私协议
+      </div>
+      <div class="filler"></div>
+      <div class="footer_agreement_item" on:click={() => navBtnClick("duty")}>
+        责任说明
+      </div>
+      <div class="filler"></div>
+      <div class="footer_agreement_item" on:click={() => navBtnClick("AFQ")}>
+        常见问题
+      </div>
+    </div>
+    <div class="footer_record">
+      Copyright © 2024 北京爱享到家科技有限公司 All rights reserved
+      <br />
+      <a class="footer_link" target="_blank" href="https://beian.miit.gov.cn/"
+        >京ICP备2024047419号-1</a
+      > 联系电话:15139725952
+    </div>
+  {:else}
+    <div class="footer_record">
+      Copyright © 2024 北京爱享到家科技有限公司 All rights reserved
+      <br />
+      <a class="footer_link" target="_blank" href="https://beian.miit.gov.cn/"
+        >京ICP备2024047419号-1</a
+      >
+      <div class="footer_other">
+        <div on:click={() => navBtnClick("AFQ")}>常见问题</div>
+        <div class="tel">
+          联系方式
+          <div class="hover">Tel: 15139725952</div>
+        </div>
+      </div>
+    </div>
   {/if}
-  <div class="footer_agreement">
-    <div class="footer_agreement_item" on:click={() => navBtnClick("terms")}>
-      服务条款
-    </div>
-    <div class="filler"></div>
-    <div class="footer_agreement_item" on:click={() => navBtnClick("privacy")}>
-      隐私协议
-    </div>
-  </div>
-  <div class={`footer_record`}>
-    Copyright © 2024 北京爱享到家科技有限公司 All rights reserved
-    <br />
-    <a class="footer_link" target="_blank" href="https://beian.miit.gov.cn/"
-      >京ICP备2024047419号-1</a
-    > 联系电话:15139725952
-  </div>
 </footer>
 
 <style lang="scss">
@@ -34,26 +60,37 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-
-    .footer_agreement {
-      position: relative;
+    margin-top: 100px;
+    .footer_other {
+      font-size: 14px;
+      color: #b7b8b6;
+      margin-top: 10px;
       display: flex;
-      font-family: PingFang SC;
-      font-weight: 500;
-      font-size: 18px;
-      color: #000000;
-      line-height: 22px;
-      margin-bottom: 23px;
-      align-items: center;
-      .footer_agreement_item {
+      width: 100%;
+      justify-content: center;
+      gap: 30px;
+      text-decoration: underline;
+      position: relative;
+      div {
         cursor: pointer;
       }
-      .filler {
-        width: 1px;
-        height: 16px;
-        background: #000000;
-        opacity: 0.1;
-        margin: 0 20px;
+      .tel {
+        position: relative;
+      }
+      .hover {
+        display: none;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: #fff;
+        padding: 6px 5px;
+        border-radius: 4px;
+        color: #000000;
+        transform: translate(110%, 10%);
+      }
+      .tel:hover .hover {
+        display: block;
+        width: 130px;
       }
     }
 
@@ -69,7 +106,7 @@
     }
     .footer_link {
       color: inherit;
-      text-decoration: underline;
+      text-decoration: none;
     }
   }
 
@@ -81,12 +118,27 @@
   }
 
   .footer.mobile {
+    margin-top: 0px;
+
     .footer_agreement {
-      font-size: 4vw;
+      position: relative;
+      display: flex;
+      font-family: PingFang SC;
+      color: #000000;
+      align-items: center;
+      font-size: 3.5vw;
       margin-bottom: 3vw;
-    }
-    .filler {
-      opacity: 0;
+      .footer_agreement_item {
+        cursor: pointer;
+      }
+      .filler {
+        width: 1px;
+        height: 16px;
+        background: #000000;
+        opacity: 0.1;
+        margin: 0 10px;
+        opacity: 0;
+      }
     }
     .footer_record {
       font-size: 2.5vw;

@@ -3,6 +3,7 @@
   export let offset: number = 0;
   export let right: boolean = false;
   export let center: boolean = false;
+  export let height: string = "100%";
   function calc(num: number): number {
     if (num) {
       return (num / 12) * 100;
@@ -14,11 +15,9 @@
 
 <div
   class="col"
-  style="width:{calc(span)}%;margin-left:{calc(offset)}%;text-align:{center
-    ? 'center'
-    : right
-      ? 'right'
-      : 'left'}"
+  style="height:{height};line-height:{height};width:{calc(span)}%;margin-left:{calc(
+    offset,
+  )}%;text-align:{center ? 'center' : right ? 'right' : 'left'}"
 >
   <slot />
 </div>

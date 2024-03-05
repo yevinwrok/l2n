@@ -1,10 +1,21 @@
 <script lang="ts">
   import { fly, fade } from "svelte/transition";
+  import { getContext } from "svelte";
+  let theSecond: boolean = getContext("theSecond");
+  function assets(theSecond: boolean): string {
+    if (theSecond) {
+      return "_2";
+    } else {
+      return "";
+    }
+  }
 </script>
 
 <div class="pc">
   <div class="pc_left" in:fade={{ duration: 500, delay: 200 }}>
-    <div class="pc_left_title">在家享受按摩服务</div>
+    <div class="pc_left_title">
+      {theSecond ? "在家享受优质服务" : "在家享受按摩服务"}
+    </div>
     <div class="pc_left_btns">
       <div class="pc_left_btn">
         <img src="./assets/icon_iOS.png" alt="" />iPhone版
@@ -13,11 +24,15 @@
         <img src="./assets/icon_android.png" alt="" />Android版
       </div>
     </div>
-    <img src="./assets/img_screen.png" alt="screen_img" class="pc_left_img" />
+    <img
+      src="./assets/img_screen{assets(theSecond)}.png"
+      alt="screen_img"
+      class="pc_left_img"
+    />
   </div>
   <div in:fade={{ duration: 500, delay: 200 }} class="pc_right">
     <img
-      src="./assets/img_phone.png"
+      src="./assets/img_phone{assets(theSecond)}.png"
       alt=""
       class="pc_right_img"
       in:fly={{ x: 500, duration: 500, delay: 200 }}

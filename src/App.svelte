@@ -5,6 +5,11 @@
   import { location } from "svelte-spa-router";
   import { onlyMobile } from "./router/index";
   import { isMobile } from "./store";
+  import { setContext } from "svelte";
+  export let theSecond = false;
+  
+  setContext("theSecond", theSecond);
+  console.log("theSecond: ", theSecond);
   let showLayout =
     Object.keys(onlyMobile).findIndex((k) => k === $location) === -1;
   $: {

@@ -2,14 +2,18 @@
   import { fade, fly } from "svelte/transition";
   import privacy from "../../agreement/privacy";
   import terms from "../../agreement/terms";
+  import duty from "../../agreement/duty";
+  import AFQ from "../../agreement/AFQ";
   import { replace } from "svelte-spa-router";
   import { isMobile } from "../../store";
   export let params = {} as {
-    slug: "privacy" | "terms";
+    slug: "privacy" | "terms" | "duty" | "AFQ";
   };
   const ag = {
     privacy,
     terms,
+    duty,
+    AFQ,
   };
   $: article = ag[params.slug];
 </script>

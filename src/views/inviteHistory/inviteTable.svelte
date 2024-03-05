@@ -1,23 +1,72 @@
 <script lang="ts">
+  import { type IRewarded, getRewarded, getShareIntro } from "../../api";
   import Col from "../../components/col.svelte";
+  import Loading from "../../components/loading.svelte";
   import Row from "../../components/row.svelte";
   import { tableConfig, tableType } from "./helper";
-  let active: tableType = tableType.left;
+  let active: tableType = tableType.rewarded;
+  let rewardedCnt = 0;
+  let page = 0,
+    hasMore = false,
+    rewarded: IRewarded["data"] = [];
+
+  getShareIntro().then((res) => {
+    rewardedCnt = res.today_price;
+  });
+
+  function getRemoteData(reset: boolean = false) {
+    rewarded = [];
+    if (reset) {
+      page = 0;
+    }
+    getRewarded({
+      page: ++page,
+      limit: 100,
+      type: active,
+    }).then((res) => {
+      hasMore = res.page.total_page > res.page.page;
+
+      rewarded = [
+        {
+          nickname: "聪明的小猫6053",
+          price: 144,
+          create_time: 1708279200000,
+          source: 4,
+          status: "接单",
+          user_type: "用户",
+          contribute_id: 6752519272634429440,
+          real_name: null,
+        },
+        {
+          nickname: "聪明的小猫6053",
+          price: 6,
+          create_time: 1708279200000,
+          source: 5,
+          status: "下单",
+          user_type: "用户",
+          contribute_id: 6752519272634429440,
+          real_name: null,
+        },
+      ];
+    });
+  }
+
+  getRemoteData();
 </script>
 
 <div class="table_tab">
   <div class="table_tab_active {active}"></div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
-    class="table_tab_left {active === tableType.left && 'active'}"
-    on:click={() => (active = tableType.left)}
+    class="table_tab_rewarded {active === tableType.rewarded && 'active'}"
+    on:click={() => (active = tableType.rewarded)}
   >
-    已获得奖励￥430
+    已获得奖励￥{rewardedCnt}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
-    class="table_tab_right {active === tableType.right && 'active'}"
-    on:click={() => (active = tableType.right)}
+    class="table_tab_unrewarded {active === tableType.unrewarded && 'active'}"
+    on:click={() => (active = tableType.unrewarded)}
   >
     奖励在路上
   </div>
@@ -26,37 +75,53 @@
   <div class="table_header">
     <Row>
       {#each tableConfig[active] as header}
-        <Col span={header.span} right={header.right} center={header.center}
-          >{header.name}</Col
+        <Col
+          span={header.span}
+          right={header.right}
+          center={header.center}
+          height="11.6vw">{header.name}</Col
         >
       {/each}
     </Row>
   </div>
-  <div class="table_body">
-    <Row>
-      {#each tableConfig[active] as header}
-        <Col span={header.span} right={header.right} center={header.center}
-          >{header.name}</Col
-        >
-      {/each}
-    </Row>
-  </div>
+  {#each rewarded as r}
+    <div class="table_body">
+      <Row>
+        {#each tableConfig[active] as header}
+          <Col
+            span={header.span}
+            right={header.right}
+            center={header.center}
+            height="11.6vw">{@html header.fieldHandler(r[header.field])}</Col
+          >
+        {/each}
+      </Row>
+    </div>
+  {/each}
+  <Loading/>
 </div>
 
 <style lang="scss">
   .table {
     padding: 0 3.3vw;
+    .table_line {
+      height: 1px;
+      background: #f3f3f3;
+      width: 100%;
+    }
     .table_header {
       font-weight: bold;
       font-size: 3.3vw;
       color: #000000;
       height: 11.6vw;
       line-height: 11.6vw;
+      border-bottom: 1px solid #f3f3f3;
     }
     .table_body {
       background: #ffffff;
       font-size: 3.3vw;
       color: #666666;
+      border-bottom: 1px solid #f3f3f3;
     }
   }
   .table_tab {
@@ -75,12 +140,12 @@
       left: 0.9vw;
       background: #fff;
       transition: transform 0.2s linear;
-      &.right {
+      &.unrewarded {
         transform: translateX(calc(100% - 1.8vw));
       }
     }
-    .table_tab_left,
-    .table_tab_right {
+    .table_tab_rewarded,
+    .table_tab_unrewarded {
       width: 49%;
       height: 9vw;
       line-height: 9vw;
@@ -93,7 +158,7 @@
         color: #000000;
       }
     }
-    .table_tab_right {
+    .table_tab_unrewarded {
       right: 0;
     }
   }

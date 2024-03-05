@@ -2,9 +2,18 @@
   import { isMobile } from "../../store";
   import { replace, push } from "svelte-spa-router";
   import HyNav from "../../components/hyNav.svelte";
+  import { getShareIntro } from "../../api/index";
   $: {
     if (!$isMobile) replace("/");
   }
+  let shareIntro = {
+    today_price: 0,
+    total_price: 0,
+    balance: 0,
+  };
+  getShareIntro().then((res) => {
+    shareIntro = res;
+  });
 </script>
 
 <div class="share">
@@ -20,7 +29,7 @@
         alt=""
         class="header_wallet_icon"
       />
-      ¥213
+      ¥{shareIntro.balance}
       <img
         src="./assets/hybrid/icon_arrow.png"
         alt=""
@@ -31,7 +40,7 @@
   <div class="top">
     <div class="top_data">
       <div class="top_data_item">
-        <div class="top_data_item_num">¥15.00</div>
+        <div class="top_data_item_num">¥{shareIntro.today_price}</div>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="top_data_item_text"
@@ -42,7 +51,7 @@
         </div>
       </div>
       <div class="top_data_item">
-        <div class="top_data_item_num">¥15.00</div>
+        <div class="top_data_item_num">¥{shareIntro.total_price}</div>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="top_data_item_text"
