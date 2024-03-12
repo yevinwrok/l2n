@@ -5,12 +5,14 @@ import Withdraw from "../views/withdraw/withdraw.svelte";
 import RewardsHistory from "../views/rewardsHistory/rewardsHistory.svelte";
 import InviteHistory from "../views/inviteHistory/inviteHistory.svelte";
 import Signature from "../views/signature/signature.svelte"
+import DataAnalysis from "../views/dataAnalysis/dataAnalysis.svelte"
 export const onlyMobile = {
     "/share/index": Share,
     "/share/withdraw": Withdraw,
     "/share/rewards_history": RewardsHistory,
     "/share/invite_history": InviteHistory,
     "/signature": Signature,
+    "/data_analysis": DataAnalysis
 }
 
 const routes = {

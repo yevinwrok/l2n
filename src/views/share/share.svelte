@@ -1,11 +1,19 @@
 <script lang="ts">
+  import { onDestroy, tick } from "svelte";
   import { isMobile } from "../../store";
   import { replace, push } from "svelte-spa-router";
   import HyNav from "../../components/hyNav.svelte";
-  import { getShareIntro } from "../../api/index";
+  import {
+    getShareIntro,
+    applyPartner,
+    getInviteRecords,
+  } from "../../api/index";
+  import toast from "../../tools/toast";
+  import { onMount } from "svelte";
   $: {
     if (!$isMobile) replace("/");
   }
+
   let shareIntro = {
     today_price: 0,
     total_price: 0,
@@ -13,6 +21,53 @@
   };
   getShareIntro().then((res) => {
     shareIntro = res;
+  });
+
+  async function apply() {
+    const res = await applyPartner();
+    if (res) {
+      toast("申请成功!");
+    }
+  }
+
+  let inviteRecords = [];
+  let carouselRef: HTMLElement;
+  getInviteRecords().then(async (res) => {
+    inviteRecords = [
+      "李兰兰 昨日通过邀请获得￥3728元",
+      "李兰兰 昨日通过邀请获得￥3728元",
+      "李兰兰 昨日通过邀请获得￥3728元",
+      "李兰兰 昨日通过邀请获得￥3728元",
+    ];
+    // inviteRecords = res || [];
+
+    await tick();
+    const children = carouselRef.querySelectorAll(".carousel_item");
+    runCarousel(children);
+  });
+
+  let tm,
+    carIndex = 0;
+  function runCarousel(children: NodeListOf<Element>) {
+    const c = Array.from(children);
+    const base = 12;
+    carIndex++;
+    if (carIndex === c.length) {
+      carIndex = 0;
+    }
+    tm = setTimeout(() => {
+      c.forEach((el, index) => {
+        const styleStr = el.getAttribute("style");
+        el.setAttribute(
+          "style",
+          `transform:translateY(${base * index - base * carIndex}vw);`,
+        );
+      });
+      runCarousel(children);
+    }, 4000);
+  }
+  onDestroy(() => {
+    clearTimeout(tm);
   });
 </script>
 
@@ -62,16 +117,18 @@
       </div>
     </div>
   </div>
-  <div class="carousel">
+  <div class="carousel" bind:this={carouselRef}>
     <img
       src="./assets/hybrid/img_share_middle.png"
       alt=""
       class="carousel_img"
     />
-    <div class="carousel_item">
-      <img src="./assets/hybrid/icon_message.png" alt="" />
-      李兰兰 昨日通过邀请获得￥3728元
-    </div>
+    {#each inviteRecords as item, index}
+      <div class="carousel_item" style="transform: translateY({index * 12}vw);">
+        <img src="./assets/hybrid/icon_message.png" alt="" />
+        {item}
+      </div>
+    {/each}
   </div>
   <div class="info">
     <img src="./assets/hybrid/img_share_assets_1.png" alt="" class="info_img" />
@@ -108,7 +165,8 @@
       alt=""
       class="partner_img"
     />
-    <div class="share_black_btn">申请市场合伙人</div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="share_black_btn" on:click={apply}>申请市场合伙人</div>
     <div class="share_gray_info">
       邀请攻略：向朋友、家人、同事等身边的人推荐该产品，并邀请
       他们使用...更多邀请攻略<img
@@ -237,6 +295,9 @@
       font-family: PingFang SC;
       font-size: 3vw;
       color: #a9a9a9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       img {
         width: 2vw;
         height: 2vw;
@@ -248,12 +309,15 @@
     width: 100vw;
     margin-top: 6vw;
     position: relative;
+    height: 12vw;
+    overflow: hidden;
     .carousel_img {
       width: 93vw;
       height: 12vw;
       margin: 0 auto;
       display: block;
     }
+
     .carousel_item {
       position: absolute;
       top: 0;
@@ -262,7 +326,7 @@
       width: 93vw;
       height: 12vw;
       left: 6vw;
-
+      transition: transform 0.5s linear;
       font-family: PingFang SC;
       font-weight: bold;
       font-size: 3vw;

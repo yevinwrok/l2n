@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { isMobileDevice$1 } from "../tools/index"
 export const isMobile = writable(isMobileDevice$1());
+export const toastMessage = writable("")
 let now = isMobileDevice$1()
 window.addEventListener("resize", throttle(() => {
     let current = isMobileDevice$1()

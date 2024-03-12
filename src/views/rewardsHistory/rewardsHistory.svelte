@@ -1,33 +1,192 @@
 <script lang="ts">
   import HyNav from "../../components/hyNav.svelte";
+  import { income_expense } from "../../api/index";
+  import dayjs from "dayjs";
+  import Loading from "../../components/loading.svelte";
+  let lastTime = Date.now();
+  let loading = false,
+    hasMore = false,
+    data = [],
+    page = 0,
+    limit = 20;
+
+  // 获取当前月份的开始时间
+  let time = Date.now();
+  let inputMonth;
+
+  async function getData(reset = false) {
+    if (reset) {
+      page = 0;
+      data = [];
+      hasMore = false;
+    }
+    loading = true;
+    try {
+      const res = await income_expense(
+        dayjs(time).format("YYYY-MM"),
+        ++page,
+        limit,
+      );
+      data = data.concat(res.data);
+      // hasMore =
+    } finally {
+      loading = false;
+    }
+    // setTimeout(() => {
+    //   loading = false;
+    //   data = data.concat([
+    //     {
+    //       id: 4, //id
+    //       create_time: 1707915594430, //时间
+    //       recorded_time: null,
+    //       estimate_recorded_time: null,
+    //       price: -10, //价格
+    //       balance: 134, //余额
+    //       title: "提现", //标题
+    //       type: 2,
+    //       source: 6,
+    //       status: null,
+    //       related_id: null,
+    //     },
+    //     {
+    //       id: 4, //id
+    //       create_time: 1707915594430, //时间
+    //       recorded_time: null,
+    //       estimate_recorded_time: null,
+    //       price: -10, //价格
+    //       balance: 134, //余额
+    //       title: "提现", //标题
+    //       type: 2,
+    //       source: 6,
+    //       status: null,
+    //       related_id: null,
+    //     },
+    //     {
+    //       id: 4, //id
+    //       create_time: 1707915594430, //时间
+    //       recorded_time: null,
+    //       estimate_recorded_time: null,
+    //       price: -10, //价格
+    //       balance: 134, //余额
+    //       title: "提现", //标题
+    //       type: 2,
+    //       source: 6,
+    //       status: null,
+    //       related_id: null,
+    //     },
+    //     {
+    //       id: 4, //id
+    //       create_time: 1707915594430, //时间
+    //       recorded_time: null,
+    //       estimate_recorded_time: null,
+    //       price: -10, //价格
+    //       balance: 134, //余额
+    //       title: "提现", //标题
+    //       type: 2,
+    //       source: 6,
+    //       status: null,
+    //       related_id: null,
+    //     },
+    //     {
+    //       id: 4, //id
+    //       create_time: 1707915594430, //时间
+    //       recorded_time: null,
+    //       estimate_recorded_time: null,
+    //       price: -10, //价格
+    //       balance: 134, //余额
+    //       title: "提现", //标题
+    //       type: 2,
+    //       source: 6,
+    //       status: null,
+    //       related_id: null,
+    //     },
+    //   ]);
+    // }, 2000);
+  }
+  $: {
+    if (inputMonth) {
+      time = dayjs(inputMonth).valueOf();
+    } else {
+      time = Date.now();
+    }
+    getData(true);
+  }
 </script>
 
 <HyNav title="收支明细"></HyNav>
 <div class="rewardsHistory">
   <div class="rewardsHistory_month">
     <div class="rewardsHistory_month_header">
-      2024年1月 <img src="./assets/hybrid/icon_arrow_down.png" alt="" />
+      {dayjs(time).format("YYYY年MM月")}
+      <img src="./assets/hybrid/icon_arrow_down.png" alt="" /><input
+        type="month"
+        class="month"
+        bind:value={inputMonth}
+      />
     </div>
-    {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as idx}
+    {#each data as item}
       <div class="rewardsHistory_month_item">
         <div class="rewardsHistory_month_item_info">
           <div class="rewardsHistory_month_item_info_1">
-            张晓芳(156****7576)【接单分红】
+            {item.title}
           </div>
-          <div class="">+18.00</div>
+          <div
+            style={item.price.toString().startsWith("-") ? "color:red;" : ""}
+          >
+            {item.price}
+          </div>
         </div>
         <div class="rewardsHistory_month_item_sub_info">
-          <div>1月23日 22:47</div>
-          <div>余额 108.00</div>
+          <div>{dayjs(item.create_time).format("MM月DD HH:mm")}</div>
+          <div>余额 {item.balance}</div>
         </div>
       </div>
     {/each}
-    <div class="rewardsHistory_month_footer">没有更多了</div>
   </div>
-  <div></div>
+  {#if loading}
+    <div class="table_loading">
+      <Loading />
+    </div>
+  {:else if hasMore}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div
+      class="table_more"
+      on:click={() => {
+        getData();
+      }}
+    >
+      加载更多
+    </div>
+  {:else if data.length === 0}
+    <div class="no_data">暂无数据</div>
+  {/if}
 </div>
 
 <style lang="scss">
+  .no_data {
+    text-align: center;
+    color: #ccc;
+    margin-top: 20vw;
+    font-size: 4vw;
+    font-weight: normal;
+  }
+  .table_more {
+    margin: 6vw auto;
+    text-align: center;
+    width: 30vw;
+    height: 8vw;
+    line-height: 8vw;
+    border: 1px solid #aaa;
+    border-radius: 20vw;
+    color: #aaa;
+    font-size: 3.5vw;
+  }
+  .table_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 11.6vw;
+  }
   .rewardsHistory {
     width: 100vw;
     height: calc(100vh - 12vw);
@@ -44,6 +203,13 @@
       font-size: 4vw;
       align-items: center;
       color: #000000;
+      position: relative;
+      .month {
+        position: absolute;
+        width: 6vw;
+        right: 1vw;
+        opacity: 0;
+      }
       img {
         width: 3.5vw;
         height: 3.5vw;

@@ -7,9 +7,9 @@
   import { isMobile } from "./store";
   import { setContext } from "svelte";
   export let theSecond = false;
-  
+  import Toast from "./components/toast.svelte";
+
   setContext("theSecond", theSecond);
-  console.log("theSecond: ", theSecond);
   let showLayout =
     Object.keys(onlyMobile).findIndex((k) => k === $location) === -1;
   $: {
@@ -28,6 +28,7 @@
   </main>
 {:else}
   <main class="hybrid_content">
+    <Toast></Toast>
     <Router {routes} />
   </main>
 {/if}

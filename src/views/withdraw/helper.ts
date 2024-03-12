@@ -1,20 +1,19 @@
 export enum ECheckboxSelect {
-    alipay,
-    wechat,
+    alipay = "ALI_PAY",
+    wechat = "WECHAT_PAY",
 }
-export const withdrawBtnList = [10, 30, 50, 100, 500, 1000];
 export const withdrawTypeList = [
     {
         name: "支付宝",
         type: ECheckboxSelect.alipay,
         icon: "./assets/hybrid/icon_alipay.png",
-        isBind: false,
+        field: "ali_account"
     },
     {
         name: "微信",
         type: ECheckboxSelect.wechat,
         icon: "./assets/hybrid/icon_wechat.png",
-        isBind: true,
+        field: "wechat_nickname"
     },
 ];
 

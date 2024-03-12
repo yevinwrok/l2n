@@ -4,67 +4,124 @@
   import HyNav from "../../components/hyNav.svelte";
   import Modal from "../../components/modal.svelte";
   import ShareBlackBtn from "../../components/shareBlackBtn.svelte";
-  import { fly } from "svelte/transition";
+  import toast from "../../tools/toast";
+  import { bindWechat, bindAli, wallet, withdraw } from "../../api/index";
   import {
     type WithdrawTypeListItem,
     ECheckboxSelect,
     withdrawTypeList,
-    withdrawBtnList,
   } from "./helper";
 
   $: {
     if (!$isMobile) replace("/");
   }
 
+  let userInfo = {
+    balance: 0,
+    ali_account: "",
+    wechat_nickname: "",
+  };
+  let withdrawBtnList = [];
   let withdrawBtnActive = 0;
   let checkboxSelect: ECheckboxSelect;
   let showModal: boolean = false;
   let modalDate: WithdrawTypeListItem;
+  let name, account_1, account_2;
 
-  const findOneWTL = withdrawTypeList.find((item) => item.isBind);
-  if (findOneWTL) {
-    checkboxSelect = findOneWTL.type;
-  }
+  wallet().then((res) => {
+    withdrawBtnList = res.withdraw_price;
+    userInfo = {
+      balance: res.balance,
+      ali_account: res.ali_account,
+      wechat_nickname: res.wechat_nickname,
+    };
+
+    if (res.ali_account) {
+      checkboxSelect = ECheckboxSelect.alipay;
+    } else if (res.wechat_nickname) {
+      checkboxSelect = ECheckboxSelect.wechat;
+    }
+  });
 
   function withdrawTypeClick(wtl: WithdrawTypeListItem) {
-    if (wtl.isBind) {
+    if (userInfo[wtl.field]) {
       checkboxSelect = wtl.type;
     } else {
       modalDate = wtl;
       showModal = true;
     }
   }
+
+  async function withdrawBind() {
+    if (!name) {
+      toast("请填写您的真实姓名");
+      return;
+    }
+
+    if (!account_1 || !account_2) {
+      toast(`请填写您的${modalDate.name}账号`);
+      return;
+    }
+
+    if (account_1 !== account_2) {
+      toast(`请填写您的${modalDate.name}账号不一致`);
+      return;
+    }
+
+    const res = await bindAli(account_1, name);
+    if (res) {
+      toast("绑定成功");
+      showModal = false;
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    }
+  }
+  async function withdrawHandle() {
+    const res = await withdraw(
+      withdrawBtnList[withdrawBtnActive],
+      checkboxSelect,
+    );
+    if (res.data) {
+      location.reload();
+    }
+  }
 </script>
 
-<Modal show={showModal} on:close={() => (showModal = false)}>
-  <div class="withdraw_modal">
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <img
-      on:click={() => (showModal = false)}
-      src="./assets/hybrid/icon_close.png"
-      alt=""
-      class="withdraw_modal_close"
-    />
-    <div class="withdraw_modal_title">请绑定{modalDate.name}</div>
-    <div class="withdraw_modal_text">绑定后可提现到{modalDate.name}钱包</div>
-    <input
-      type="text"
-      class="withdraw_modal_input"
-      placeholder="请输入您的真实姓名"
-    />
-    <input
-      type="text"
-      class="withdraw_modal_input"
-      placeholder="请输入您的{modalDate.name}账号"
-    />
-    <input
-      type="text"
-      class="withdraw_modal_input"
-      placeholder="请再次输入您的{modalDate.name}账号"
-    />
-    <div class="withdraw_modal_btn">提交</div>
-  </div>
-</Modal>
+{#if showModal}
+  <Modal show={showModal} on:close={() => (showModal = false)}>
+    <div class="withdraw_modal">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <img
+        on:click={() => (showModal = false)}
+        src="./assets/hybrid/icon_close.png"
+        alt=""
+        class="withdraw_modal_close"
+      />
+      <div class="withdraw_modal_title">请绑定{modalDate.name}</div>
+      <div class="withdraw_modal_text">绑定后可提现到{modalDate.name}钱包</div>
+      <input
+        type="text"
+        class="withdraw_modal_input"
+        placeholder="请输入您的真实姓名"
+        bind:value={name}
+      />
+      <input
+        type="text"
+        class="withdraw_modal_input"
+        placeholder="请输入您的{modalDate.name}账号"
+        bind:value={account_1}
+      />
+      <input
+        type="text"
+        class="withdraw_modal_input"
+        placeholder="请再次输入您的{modalDate.name}账号"
+        bind:value={account_2}
+      />
+      <div class="withdraw_modal_btn" on:click={withdrawBind}>提交</div>
+    </div>
+  </Modal>
+{/if}
 
 <HyNav title="提现" backFn={() => pop()}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -79,7 +136,7 @@
 
 <div class="withdraw">
   <div class="current">
-    <div class="current_amount">￥231.00</div>
+    <div class="current_amount">￥{userInfo.balance}</div>
     <div class="current_text">当前余额(元)</div>
   </div>
   <div class="withdraw_subtitle">请选择提现金额</div>
@@ -102,11 +159,11 @@
         <img src={wtl.icon} alt="" class="withdraw_type_item_icon" />
         <div class="withdraw_type_item_text">提现到{wtl.name}</div>
         <div class="withdraw_type_item_main">
-          {#if !wtl.isBind}
+          {#if !userInfo[wtl.field]}
             暂未绑定{wtl.name}
             <img src="./assets/hybrid/icon_arrow_1.png" alt="" />
           {:else}
-            156****7576
+            {userInfo[wtl.field]}
           {/if}
         </div>
         <div
@@ -117,7 +174,7 @@
       </div>
     {/each}
   </div>
-  <div class="withdraw_black_btn">
+  <div class="withdraw_black_btn" on:click={withdrawHandle}>
     <ShareBlackBtn>提现</ShareBlackBtn>
   </div>
 </div>

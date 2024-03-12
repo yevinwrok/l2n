@@ -1,18 +1,16 @@
-<div class="loading">
-  <div class="loading-box">
-    <i class="fade-item fade-item1"></i>
-    <i class="fade-item fade-item2"></i>
-    <i class="fade-item fade-item3"></i>
-    <i class="fade-item fade-item4"></i>
-    <i class="fade-item fade-item5"></i>
-    <i class="fade-item fade-item6"></i>
-    <i class="fade-item fade-item7"></i>
-    <i class="fade-item fade-item8"></i>
-    <i class="fade-item fade-item9"></i>
-    <i class="fade-item fade-item10"></i>
-    <i class="fade-item fade-item11"></i>
-    <i class="fade-item fade-item12"></i>
-  </div>
+<div class="loading-box">
+  <i class="fade-item fade-item1"></i>
+  <i class="fade-item fade-item2"></i>
+  <i class="fade-item fade-item3"></i>
+  <i class="fade-item fade-item4"></i>
+  <i class="fade-item fade-item5"></i>
+  <i class="fade-item fade-item6"></i>
+  <i class="fade-item fade-item7"></i>
+  <i class="fade-item fade-item8"></i>
+  <i class="fade-item fade-item9"></i>
+  <i class="fade-item fade-item10"></i>
+  <i class="fade-item fade-item11"></i>
+  <i class="fade-item fade-item12"></i>
 </div>
 
 <style>
@@ -22,12 +20,14 @@
     --item-line-height: 1.8vw;
   }
 
-  .loading .loading-box {
+  .loading-box {
     position: relative;
     border-radius: 4px;
+    width: var(--item-height);
+    height: var(--item-height);
   }
 
-  .loading .loading-box .fade-item {
+  .loading-box .fade-item {
     position: absolute;
     top: 0;
     left: 0;
@@ -35,7 +35,7 @@
     height: var(--item-height);
   }
 
-  .loading .loading-box .fade-item:before {
+  .loading-box .fade-item:before {
     content: "";
     display: block;
     margin: 0 auto;
@@ -46,95 +46,95 @@
     -webkit-border-radius: 4px;
   }
 
-  .loading .loading-box .fade-item2 {
+  .loading-box .fade-item2 {
     transform: rotate(30deg);
   }
 
-  .loading .loading-box .fade-item3 {
+  .loading-box .fade-item3 {
     transform: rotate(60deg);
   }
 
-  .loading .loading-box .fade-item4 {
+  .loading-box .fade-item4 {
     transform: rotate(90deg);
   }
 
-  .loading .loading-box .fade-item5 {
+  .loading-box .fade-item5 {
     transform: rotate(120deg);
   }
 
-  .loading .loading-box .fade-item6 {
+  .loading-box .fade-item6 {
     transform: rotate(150deg);
   }
 
-  .loading .loading-box .fade-item7 {
+  .loading-box .fade-item7 {
     transform: rotate(180deg);
   }
 
-  .loading .loading-box .fade-item8 {
+  .loading-box .fade-item8 {
     transform: rotate(210deg);
   }
 
-  .loading .loading-box .fade-item9 {
+  .loading-box .fade-item9 {
     transform: rotate(240deg);
   }
 
-  .loading .loading-box .fade-item10 {
+  .loading-box .fade-item10 {
     transform: rotate(270deg);
   }
 
-  .loading .loading-box .fade-item11 {
+  .loading-box .fade-item11 {
     transform: rotate(300deg);
   }
 
-  .loading .loading-box .fade-item12 {
+  .loading-box .fade-item12 {
     transform: rotate(330deg);
   }
 
-  .loading .loading-box .fade-item:before {
+  .loading-box .fade-item:before {
     animation: fadeDelay 1.2s infinite ease-in-out both;
   }
 
-  .loading .loading-box .fade-item2:before {
+  .loading-box .fade-item2:before {
     animation-delay: -1.1s;
   }
 
-  .loading .loading-box .fade-item3:before {
+  .loading-box .fade-item3:before {
     animation-delay: -1s;
   }
 
-  .loading .loading-box .fade-item4:before {
+  .loading-box .fade-item4:before {
     animation-delay: -0.9s;
   }
 
-  .loading .loading-box .fade-item5:before {
+  .loading-box .fade-item5:before {
     animation-delay: -0.8s;
   }
 
-  .loading .loading-box .fade-item6:before {
+  .loading-box .fade-item6:before {
     animation-delay: -0.7s;
   }
 
-  .loading .loading-box .fade-item7:before {
+  .loading-box .fade-item7:before {
     animation-delay: -0.6s;
   }
 
-  .loading .loading-box .fade-item8:before {
+  .loading-box .fade-item8:before {
     animation-delay: -0.5s;
   }
 
-  .loading .loading-box .fade-item9:before {
+  .loading-box .fade-item9:before {
     animation-delay: -0.4s;
   }
 
-  .loading .loading-box .fade-item10:before {
+  .loading-box .fade-item10:before {
     animation-delay: -0.3s;
   }
 
-  .loading .loading-box .fade-item11:before {
+  .loading-box .fade-item11:before {
     animation-delay: -0.2s;
   }
 
-  .loading .loading-box .fade-item12:before {
+  .loading-box .fade-item12:before {
     animation-delay: -0.1s;
   }
 

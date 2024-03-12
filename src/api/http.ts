@@ -1,5 +1,6 @@
 import axios, { type AxiosRequestConfig, type AxiosRequestHeaders, type AxiosResponse } from 'axios';
 import { config } from '../config/index';
+import toast from "../tools/toast"
 const service = axios.create({
     baseURL: 'https://api.aixiangdaojia.com',
     timeout: 10000,
@@ -7,6 +8,7 @@ const service = axios.create({
 });
 const tech_path = "/technician/invitation/"
 const user_path = "/user/wallet/"
+const sys = "/system/"
 const base_api = config.API_URL;
 const get_fn = service.get;
 const post_fn = service.post;
@@ -46,6 +48,7 @@ service.interceptors.response.use(
             //     location.href = location.origin;
             //     break;
             default:
+                msg && toast(msg)
                 return Promise.reject(response);
         }
     },
@@ -56,10 +59,12 @@ service.interceptors.response.use(
 export enum BASE_PATH_TYPE_ENUM {
     'user' = "user",
     'tech' = "tech",
+    "sys" = "sys",
 }
 const BASE_PATH_TYPE_ENUM_LIST = {
     [BASE_PATH_TYPE_ENUM.tech]: tech_path,
-    [BASE_PATH_TYPE_ENUM.user]: user_path
+    [BASE_PATH_TYPE_ENUM.user]: user_path,
+    [BASE_PATH_TYPE_ENUM.sys]: sys
 };
 
 

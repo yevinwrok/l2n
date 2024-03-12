@@ -1,4 +1,5 @@
-import http from "./http";
+import type { ECheckboxSelect } from "../views/withdraw/helper";
+import http, { BASE_PATH_TYPE_ENUM } from "./http";
 
 
 interface IShareIntro {
@@ -80,6 +81,63 @@ export function getRewarded({
         {
             page,
             limit
+        }
+    )
+}
+
+export function applyPartner() {
+    return http.get("/apply_partner", {})
+}
+
+export function getInviteRecords() {
+    return http.get("/invitation_records", {}, BASE_PATH_TYPE_ENUM.sys);
+}
+
+export function income_expense(
+    date: string,
+    page: number,
+    limit: number
+    ) {
+    console.log('limit: ', limit);
+    return http.post("/income_expense", {
+        date,
+        page,
+        limit
+    });
+}
+
+
+export function bindAli(account: string, name: string) {
+    return http.post(
+        "/bind_ali_Account",
+        {
+            "ali_account": account,
+            "ali_real_name": name,
+        }
+    )
+
+}
+export function bindWechat(code) {
+    return http.post(
+        "/bind_wechat_Account",
+        {
+            code
+        }
+    )
+}
+
+export function wallet() {
+    return http.get(
+        "/info",
+    )
+}
+
+export function withdraw(amount: string, type: ECheckboxSelect) {
+    return http.post(
+        "/withdraw",
+        {
+            amount,
+            pay_type_enum: type
         }
     )
 }
