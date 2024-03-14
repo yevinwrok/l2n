@@ -8,7 +8,10 @@
 
   function getData() {
     console.log("@@@@@@@@", filter);
-    getDateAnalysis(filter).then((res) => (analysisDetail = res.summary));
+    getDateAnalysis(filter).then((res) => {
+      console.log(res);
+      analysisDetail = res.summary || {};
+    });
   }
 </script>
 

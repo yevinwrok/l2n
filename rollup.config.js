@@ -103,7 +103,7 @@ export default [{
 production && {
 	input: 'src/second_main.ts',
 	output: {
-		sourcemap: true,
+		sourcemap: false,
 		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle_second.js'
@@ -148,8 +148,8 @@ production && {
 		}),
 		commonjs(),
 		typescript({
-			sourceMap: !production,
-			inlineSources: !production
+			sourceMap: false,
+			inlineSources: false
 		}),
 
 		// In dev mode, call `npm run start` once

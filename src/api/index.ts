@@ -152,9 +152,9 @@ export function inviteShare() {
     )
 }
 
-export function getDateAnalysis(params = {}) {
-    return http.get(
+export function getDateAnalysis(data = {}) {
+    return http.post(
         "/statistics",
-        params
+        data
     )
 }

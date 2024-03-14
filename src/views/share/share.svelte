@@ -84,7 +84,7 @@
 </script>
 
 <div class="share">
-  <HyNav title="分享赚钱">
+  <HyNav title="分享赚钱" hideBack>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
       class="header_wallet"
