@@ -10,10 +10,12 @@
   {#if $isMobile}
     <img src="./assets/img_bottom.png" alt="" class="img_bottom" />
     <div class="footer_agreement">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="footer_agreement_item" on:click={() => navBtnClick("terms")}>
         服务条款
       </div>
       <div class="filler"></div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="footer_agreement_item"
         on:click={() => navBtnClick("privacy")}
@@ -21,10 +23,12 @@
         隐私协议
       </div>
       <div class="filler"></div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="footer_agreement_item" on:click={() => navBtnClick("duty")}>
         责任说明
       </div>
       <div class="filler"></div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="footer_agreement_item" on:click={() => navBtnClick("AFQ")}>
         常见问题
       </div>
@@ -44,6 +48,7 @@
         >京ICP备2024047419号-1</a
       >
       <div class="footer_other">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div on:click={() => navBtnClick("AFQ")}>常见问题</div>
         <div class="tel">
           联系方式

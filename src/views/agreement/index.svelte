@@ -4,27 +4,39 @@
   import terms from "../../agreement/terms";
   import duty from "../../agreement/duty";
   import AFQ from "../../agreement/AFQ";
-  import { replace } from "svelte-spa-router";
+
+  import logout from "../../agreement/logout";
+  import cooperation from "../../agreement/cooperation";
+
   import { isMobile } from "../../store";
   export let params = {} as {
-    slug: "privacy" | "terms" | "duty" | "AFQ";
+    slug: "privacy" | "terms" | "duty" | "AFQ" | "logout" | "cooperation";
   };
+  console.log("params: ", params);
+  let black = ["logout", "cooperation"];
   const ag = {
     privacy,
     terms,
     duty,
     AFQ,
+    logout,
+    cooperation,
   };
+
   $: article = ag[params.slug];
 </script>
 
-{#if $isMobile}
+<!-- {#if $isMobile}
   <div class="back-button" on:click={() => replace("/")}>&lt; Back</div>
-{/if}
+{/if} -->
 {#key params.slug}
-  <article class={`agreement ${$isMobile ? "mobile" : ""}`}>
+  <article
+    class={`agreement ${$isMobile ? "mobile" : ""}  ${black.includes(params.slug) ? "black" : ""}`}
+  >
     <h1 class="agreement_title">{article.title}</h1>
-    <h3 class="agreement_time">{article.time}</h3>
+    {#if article.time}
+      <h3 class="agreement_time">{article.time}</h3>
+    {/if}
     {#each article.content as item}
       <div class="agreement_item">{item}</div>
     {/each}
@@ -57,6 +69,12 @@
     padding: 10vw;
     background-color: transparent;
     margin-top: 0;
+    &.black {
+      background-color: #fff;
+      color: #000;
+      border-radius: 0;
+      margin-bottom: 0;
+    }
     .agreement_title {
       margin-bottom: 1vw;
       font-size: 10vw;

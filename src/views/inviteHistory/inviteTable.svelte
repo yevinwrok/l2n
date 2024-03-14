@@ -144,11 +144,11 @@
   .table {
     padding: 0 3.3vw;
     width: 100%;
-    .table_line {
-      height: 1px;
-      background: #f3f3f3;
-      width: 100%;
-    }
+    // .table_line {
+    //   height: 1px;
+    //   background: #f3f3f3;
+    //   width: 100%;
+    // }
 
     .table_loading {
       display: flex;

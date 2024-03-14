@@ -118,6 +118,7 @@
         placeholder="请再次输入您的{modalDate.name}账号"
         bind:value={account_2}
       />
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="withdraw_modal_btn" on:click={withdrawBind}>提交</div>
     </div>
   </Modal>
@@ -174,6 +175,7 @@
       </div>
     {/each}
   </div>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="withdraw_black_btn" on:click={withdrawHandle}>
     <ShareBlackBtn>提现</ShareBlackBtn>
   </div>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/eruda/2.11.2/eruda.js"></script>
+    <script>
+        eruda.init()
+    </script>
+</head>
+
+<body>
+    <button id="btn">click me !</button>
+    <div id="SDBridge"></div>
+    <script>
+        document.getElementById("btn").onclick = () => {
+            const bridge = window.WebViewJavascriptBridge;
+            bridge.callHandler('DeviceLoadJavascriptSuccess', { key: 'JSValue' }, function (response) {
+                let result = response.result
+                if (result === "iOS") {
+                    console.log("Javascript was loaded by IOS and successfully loaded.");
+                    document.getElementById("SDBridge").innerText = "Javascript was loaded by IOS and successfully loaded.";
+                    window.iOSLoadJSSuccess = true;
+                } else if (result === "Android") {
+                    console.log("Javascript was loaded by Android and successfully loaded.");
+                    document.getElementById("SDBridge").innerText = "Javascript was loaded by Android and successfully loaded.";
+                    window.AndroidLoadJSSuccess = true;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

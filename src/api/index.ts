@@ -90,14 +90,14 @@ export function applyPartner() {
 }
 
 export function getInviteRecords() {
-    return http.get("/invitation_records", {}, BASE_PATH_TYPE_ENUM.sys);
+    return http.get("/invitation_records", {}, true);
 }
 
 export function income_expense(
     date: string,
     page: number,
     limit: number
-    ) {
+) {
     console.log('limit: ', limit);
     return http.post("/income_expense", {
         date,
@@ -139,5 +139,22 @@ export function withdraw(amount: string, type: ECheckboxSelect) {
             amount,
             pay_type_enum: type
         }
+    )
+}
+
+
+
+
+export function inviteShare() {
+    return http.get(
+        "/invitation_share",
+        {}
+    )
+}
+
+export function getDateAnalysis(params = {}) {
+    return http.get(
+        "/statistics",
+        params
     )
 }

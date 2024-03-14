@@ -3,13 +3,14 @@
   import { isMobile } from "../../store";
   import { replace, push } from "svelte-spa-router";
   import HyNav from "../../components/hyNav.svelte";
+  import ShareModal from "./shareModal.svelte";
   import {
     getShareIntro,
     applyPartner,
     getInviteRecords,
+    inviteShare,
   } from "../../api/index";
   import toast from "../../tools/toast";
-  import { onMount } from "svelte";
   $: {
     if (!$isMobile) replace("/");
   }
@@ -33,13 +34,13 @@
   let inviteRecords = [];
   let carouselRef: HTMLElement;
   getInviteRecords().then(async (res) => {
-    inviteRecords = [
-      "李兰兰 昨日通过邀请获得￥3728元",
-      "李兰兰 昨日通过邀请获得￥3728元",
-      "李兰兰 昨日通过邀请获得￥3728元",
-      "李兰兰 昨日通过邀请获得￥3728元",
-    ];
-    // inviteRecords = res || [];
+    // inviteRecords = [
+    //   "李兰兰 昨日通过邀请获得￥3728元",
+    //   "李兰兰 昨日通过邀请获得￥3728元",
+    //   "李兰兰 昨日通过邀请获得￥3728元",
+    //   "李兰兰 昨日通过邀请获得￥3728元",
+    // ];
+    inviteRecords = res || [];
 
     await tick();
     const children = carouselRef.querySelectorAll(".carousel_item");
@@ -66,6 +67,17 @@
       runCarousel(children);
     }, 4000);
   }
+  let shareModalImg,
+    shareModalShow = false;
+  function share() {
+    inviteShare().then((res) => {
+      if (res && res.img_url) {
+        shareModalShow = true;
+        shareModalImg = res.img_url;
+      }
+    });
+  }
+
   onDestroy(() => {
     clearTimeout(tm);
   });
@@ -149,7 +161,8 @@
         <div class="info_text_item_tag">永久奖励</div>
       </div>
     </div>
-    <div class="share_black_btn">邀请赚钱</div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="share_black_btn" on:click={share}>邀请赚钱</div>
     <div class="share_gray_info">
       注：被邀请用户可随意切换用户/技师身份，只要邀请成功，可以
       同时享受两种身份的金额分成奖励... 查看活动规则<img
@@ -177,6 +190,11 @@
     </div>
   </div>
 </div>
+<ShareModal
+  show={shareModalShow}
+  img={shareModalImg}
+  on:close={() => (shareModalShow = false)}
+/>
 
 <style lang="scss" scoped>
   .partner_img {
@@ -196,6 +214,7 @@
     .share_gray_info_arrow {
       width: 2vw;
       height: 2vw;
+      display: inline;
     }
   }
   .share_black_btn {

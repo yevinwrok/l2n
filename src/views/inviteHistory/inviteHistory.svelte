@@ -62,7 +62,7 @@
     justify-content: flex-start !important;
   }
   .invite_total {
-    margin: 0 auto;
+    margin: 3vw auto 0;
     width: 93vw;
     background: #f7f8fa;
     border-radius: 2vw;

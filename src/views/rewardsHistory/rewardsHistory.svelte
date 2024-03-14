@@ -189,7 +189,6 @@
   }
   .rewardsHistory {
     width: 100vw;
-    height: calc(100vh - 12vw);
     overflow: hidden;
     overflow-y: auto;
   }
@@ -239,14 +238,14 @@
       color: #a9a9a9;
       margin-top: 3vw;
     }
-    .red {
-      color: #ff2d51;
-    }
+    // .red {
+    //   color: #ff2d51;
+    // }
   }
-  .rewardsHistory_month_footer {
-    font-size: 3vw;
-    color: #a9a9a9;
-    padding: 6vw 0 9vw;
-    text-align: center;
-  }
+  // .rewardsHistory_month_footer {
+  //   font-size: 3vw;
+  //   color: #a9a9a9;
+  //   padding: 6vw 0 9vw;
+  //   text-align: center;
+  // }
 </style>

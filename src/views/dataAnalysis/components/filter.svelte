@@ -1,15 +1,26 @@
 <script lang="ts">
   import dayjs from "dayjs";
   import DataPicker from "../../../components/datePicker.svelte";
+  import { createEventDispatcher } from "svelte";
   let start = dayjs().startOf("month"),
     end = dayjs().endOf("month");
+
+  function d() {
+    return {
+      start: start.valueOf(),
+      end: end.valueOf(),
+    };
+  }
   function picked(e, type) {
     if (type === "start") {
       start = dayjs(e.detail.datepicked);
     } else if (type === "end") {
       end = dayjs(e.detail.datepicked);
     }
+    dispatch("change", d());
   }
+  const dispatch = createEventDispatcher();
+  dispatch("change", d());
 </script>
 
 <div class="filter">

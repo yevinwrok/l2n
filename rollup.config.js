@@ -99,7 +99,8 @@ export default [{
 	watch: {
 		clearScreen: false
 	}
-}, {
+},
+production && {
 	input: 'src/second_main.ts',
 	output: {
 		sourcemap: true,
@@ -166,4 +167,5 @@ export default [{
 	watch: {
 		clearScreen: false
 	}
-}];
+}
+];

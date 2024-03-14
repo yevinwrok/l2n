@@ -1,11 +1,25 @@
 <script lang="ts">
-  import { pop } from "svelte-spa-router";
+  import { pop, location } from "svelte-spa-router";
   export let title = "";
   export let hideBack = false;
   export let backFn = pop;
+
+  let fillerHeaderList = [
+    "/share/index",
+    "/share/withdraw",
+    "/share/rewards_history",
+    "/share/invite_history",
+  ];
+  let fillerHeader = false;
+  $: {
+    fillerHeader = fillerHeaderList.includes($location);
+  }
 </script>
 
 <nav class="header">
+  {#if fillerHeader}
+    <div class="header_filter"></div>
+  {/if}
   <div class="header_left">
     {#if !hideBack}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -25,13 +39,23 @@
 </nav>
 
 <style lang="scss">
+  .header_filter {
+    height: 10vw;
+    width: 100%;
+    flex-grow: 1;
+  }
   .header {
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 4vw;
-    height: 12vw;
+    min-height: 12vw;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
   }
   .header_title {
     display: flex;
