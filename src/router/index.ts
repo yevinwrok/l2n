@@ -4,21 +4,27 @@ import Share from "../views/share/share.svelte";
 import Withdraw from "../views/withdraw/withdraw.svelte";
 import RewardsHistory from "../views/rewardsHistory/rewardsHistory.svelte";
 import InviteHistory from "../views/inviteHistory/inviteHistory.svelte";
-import Signature from "../views/signature/signature.svelte"
 import DataAnalysis from "../views/dataAnalysis/dataAnalysis.svelte"
-export const onlyMobile = {
+import ContentSignature from "../views/content/signature/signature.svelte"
+import Accredit from "../views/accredit/accredit.svelte";
+import LandingPage from "../views/landingPage/landingPage.svelte";
+import Survey from "../views/survey/survey.svelte";
+export const hybrid = {
     "/share/index": Share,
     "/share/withdraw": Withdraw,
     "/share/rewards_history": RewardsHistory,
     "/share/invite_history": InviteHistory,
-    "/signature": Signature,
-    "/data_analysis": DataAnalysis
+    "/data_analysis": DataAnalysis,
+    "/accredit": Accredit,
+    "/survey": Survey,
+    "/content/signature": ContentSignature,
 }
 
 const routes = {
     "/": Homepage,
     "/agreement/:slug": Agreement,
-    ...onlyMobile
+    "/landing_page": LandingPage,
+    ...hybrid
 }
 
 

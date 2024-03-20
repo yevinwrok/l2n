@@ -39,97 +39,70 @@ type EChartsOption = echarts.ComposeOption<
 
 
 
-var option: EChartsOption;
+export function mkOpt(params: EChartsOption = {}): EChartsOption {
+    return Object.assign({
+        title: {},
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            },
+            position: function (point) {
+                if (window.innerWidth / 2 > point[0]) {
+                    return {
+                        left: point[0],
+                        top: point[1]
+                    }
+                } else {
+                    return {
+                        right: window.innerWidth - 10 - point[0],
+                        top: point[1]
+                    }
+                }
 
-option = {
-    title: {},
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            label: {
-                backgroundColor: '#6a7985'
             }
-        }
-    },
-    // legend: {
-    //     data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-    // },
-    toolbox: {
-        feature: {
-        }
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '4%',
-        top: "10%",
-        containLabel: true
-    },
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value'
-        }
-    ],
-    series: [
-        {
-            name: 'Email',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {
-                color: "#3672EF",
-                opacity: 0.5,
-            },
-            smooth: true,
-            showSymbol: false,
-            emphasis: {
-                focus: 'series'
-            },
-            data: [120, 132, 101, 134, 90, 230, 210]
+
         },
-        {
-            name: 'Union Ads',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            showSymbol: false,
-            areaStyle: {
-                color: "#3672EF",
-                opacity: 0.5,
-            },
-            emphasis: {
-                focus: 'series'
-            },
-            data: [220, 182, 191, 234, 290, 330, 310]
+        // legend: {
+        //     data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        // },
+        toolbox: {
+            feature: {
+            }
         },
-        {
-            name: 'Video Ads',
-            showSymbol: false,
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            areaStyle: {
-                color: "#3672EF",
-                opacity: 0.5,
-            },
-            emphasis: {
-                focus: 'series'
-            },
-            data: [150, 232, 201, 154, 190, 330, 410]
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '4%',
+            top: "10%",
+            containLabel: true
         },
-    ]
-};
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: []
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            
+        ]
+    } as EChartsOption, params)
+}
 
 
 
-export function initChart(chartDom: HTMLElement) {
+
+export function initChart(chartDom: HTMLElement, opt = {}): echarts.ECharts {
     var myChart = echarts.init(chartDom);
-    option && myChart.setOption(option);
+    myChart.setOption(mkOpt(opt));
+    return myChart
 }

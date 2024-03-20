@@ -19,8 +19,6 @@
   } = {};
   export const signatureFn = {
     isLive() {
-      console.log("canvas: ", canvas);
-      console.log("s: ", s);
       return !!canvas && !!s;
     },
   };
@@ -37,6 +35,7 @@
     const opt = {
       height,
       width,
+      scale: 1,
       ...option,
     };
     s = new SmoothSignature(canvas, opt);

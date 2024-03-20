@@ -4,14 +4,44 @@
   import ITL from "./components/inviteTotalLayout.svelte";
   import { getDateAnalysis } from "../../api";
   let analysisDetail = {} as any;
+  let trend = [];
+  let t = [];
   let filter = {};
-
+  let active: Set<string>;
+  let first = false;
   function getData() {
-    console.log("@@@@@@@@", filter);
+    if (!first) {
+      first = true;
+      return;
+    }
     getDateAnalysis(filter).then((res) => {
       console.log(res);
       analysisDetail = res.summary || {};
+      t = res.trend || [];
+      trend = clone(t);
     });
+  }
+
+  function clone(a: any) {
+    return JSON.parse(JSON.stringify(a));
+  }
+  $: {
+    if (active) {
+      if (active.has("all")) {
+        trend = clone(t);
+      } else {
+        let keys = Array.from(active);
+        let data = clone(t);
+        trend = data.map((item) => {
+          const res = {};
+          keys.forEach((k) => {
+            res[k] = item[k];
+          });
+          res["pt"] = item["pt"];
+          return res;
+        });
+      }
+    }
   }
 </script>
 
@@ -20,11 +50,17 @@
     filter = data.detail;
     getData();
   }}
+  on:filter={(a) => (active = a.detail)}
 ></Filter>
 <main style="padding: 0 3.5vw;">
-  <Chart></Chart>
+  {#key trend}
+    <Chart {trend}></Chart>
+  {/key}
   <div class="dynamic">
-    动态退单率：0% <img src="./assets/hybrid/icon_help.png" alt="" />
+    动态退单率：{analysisDetail.refund_rate === undefined
+      ? "-"
+      : analysisDetail.refund_rate}%
+    <img src="./assets/hybrid/icon_help.png" alt="" />
   </div>
   <div class="invite_total">
     <div class="invite_total_item block_full">
@@ -42,35 +78,35 @@
     </div>
 
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.order_accept_rate} text="总接单率" />
+      <ITL num={analysisDetail.order_accept_rate} text="总接单率" percent />
       <ITL num={analysisDetail.order_accept_cnt} text="总接单量(单)" />
       <ITL num={analysisDetail.order_accept_price} text="总接单金额(元)" />
     </div>
 
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.order_complete_rate} text="成交率" />
+      <ITL num={analysisDetail.order_complete_rate} text="成交率" percent />
       <ITL num={analysisDetail.order_complete_cnt} text="成交量(单)" />
       <ITL num={analysisDetail.order_complete_price} text="成交金额(元)" />
     </div>
 
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.refund_rate} text="退单率" />
+      <ITL num={analysisDetail.refund_rate} text="退单率" percent />
       <ITL num={analysisDetail.order_refund_cnt} text="退单量(单)" />
       <ITL num={analysisDetail.order_refund_price} text="退单金额(元)" />
     </div>
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.order_reward_rate} text="打赏率" />
+      <ITL num={analysisDetail.order_reward_rate} text="打赏率" percent />
       <ITL num={analysisDetail.order_reward_cnt} text="打赏量(单)" />
       <ITL num={analysisDetail.order_reward_price} text="打赏金额(元)" />
     </div>
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.add_clock_rate} text="加钟率" />
+      <ITL num={analysisDetail.add_clock_rate} text="加钟率" percent />
       <ITL num={analysisDetail.add_clock_cnt} text="加钟量(单)" />
       <ITL num={analysisDetail.add_clock_price} text="加钟金额(元)" />
     </div>
 
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.order_reject_rate} text="拒单率" />
+      <ITL num={analysisDetail.order_reject_rate} text="拒单率" percent />
       <ITL num={analysisDetail.order_reject_cnt} text="拒单量(单)" />
       <ITL num={analysisDetail.order_reject_price} text="拒单金额(元)" />
     </div>
@@ -88,6 +124,7 @@
     color: #a9a9a9;
     margin-top: 5.5vw;
     text-align: center;
+    padding-bottom: 2vw;
   }
   .dynamic {
     margin-top: 3.6vw;

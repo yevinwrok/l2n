@@ -18,7 +18,6 @@ const post_fn = service.post;
 
 service.interceptors.request.use(async (config) => {
     let headers = {} as any
-    console.log(config);
     if (isApp()) {
         const callData = {
             url: config.url,
@@ -33,7 +32,7 @@ service.interceptors.request.use(async (config) => {
     } else {
         console.log("not in app");
         headers = {
-            Authorization: localStorage.getItem('Authorization') || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbl91c2VyX2tleSI6Ijk1MDFkYzcyLWYzYTAtNGYzYS1iMGIxLTFlOTQyYWQyZWNhYSIsImV4cCI6MTcxMDEyMTg0N30.USR-q_zzJjENtFyeZ8PKjUyjedMaAFg_WOYWDoc5Pf0',
+            Authorization: localStorage.getItem('Authorization') || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbl91c2VyX2tleSI6IjQ4YTU2ODM0LThiMDQtNDc2ZC1hMWU3LWYwNzJhYTcxMzU2MCIsImV4cCI6MTcxMTA3NDY1MH0.bhwF0Yr5Y38H-7WavO2IvMBmm7qGh8LdnT6qoNFMUjU',
             d: '1112233',
             model: 'iPhone 13 Pro Max',
             o: 'ios',

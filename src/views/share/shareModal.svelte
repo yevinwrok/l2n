@@ -109,6 +109,7 @@
     width: 83.7vw;
     height: 139.5vw;
     margin: 0 auto;
+    display: block;
     transform: scale(0.8);
   }
   .share_modal_bottom {

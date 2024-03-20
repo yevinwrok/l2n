@@ -11,6 +11,7 @@
     ECheckboxSelect,
     withdrawTypeList,
   } from "./helper";
+  import { call } from "../../bridge";
 
   $: {
     if (!$isMobile) replace("/");
@@ -29,7 +30,7 @@
   let name, account_1, account_2;
 
   wallet().then((res) => {
-    withdrawBtnList = res.withdraw_price;
+    withdrawBtnList = res.withdraw_price || [];
     userInfo = {
       balance: res.balance,
       ali_account: res.ali_account,
@@ -43,12 +44,23 @@
     }
   });
 
-  function withdrawTypeClick(wtl: WithdrawTypeListItem) {
-    if (userInfo[wtl.field]) {
-      checkboxSelect = wtl.type;
+  async function withdrawTypeClick(wtl: WithdrawTypeListItem) {
+    if (wtl.type === ECheckboxSelect.wechat) {
+      const res: any = await call("weChatLogin", {});
+      if (res.code) {
+        const r = await bindWechat(res.code);
+        if (r) {
+          toast("绑定成功");
+          window.location.reload();
+        }
+      }
     } else {
-      modalDate = wtl;
-      showModal = true;
+      if (userInfo[wtl.field]) {
+        checkboxSelect = wtl.type;
+      } else {
+        modalDate = wtl;
+        showModal = true;
+      }
     }
   }
 
