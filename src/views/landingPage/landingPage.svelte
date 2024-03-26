@@ -1,11 +1,25 @@
 <script lang="ts">
   import { replace } from "svelte-spa-router";
   import { isMobile } from "../../store";
+  import qs from "qs";
+  import copyText from "../../tools/copy";
+  let href = window.location.href;
+  let p = href.split("?") ? href.split("?")[1] : "";
+  let query = (qs.parse(p, { ignoreQueryPrefix: true }) as {
+    invitor: string;
+    clip: string;
+  }) || {
+    invitor: "",
+    clip: "",
+  };
+
   if (!$isMobile) {
     replace("/");
   }
   function install() {
-    // 粘贴板
+    if (query.invitor) {
+      copyText(`${query.clip}:${query.invitor}`);
+    }
     // 埋点
     // 如果是安卓
     // 如果是ios

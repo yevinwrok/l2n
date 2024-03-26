@@ -68,12 +68,14 @@
     }, 4000);
   }
   let shareModalImg,
-    shareModalShow = false;
+    shareModalShow = false,
+    shareModalUrl = "";
   function share() {
     inviteShare().then((res) => {
       if (res && res.img_url) {
         shareModalShow = true;
         shareModalImg = res.img_url;
+        shareModalUrl = res.url;
       }
     });
   }
@@ -193,6 +195,7 @@
 <ShareModal
   show={shareModalShow}
   img={shareModalImg}
+  url={shareModalUrl}
   on:close={() => (shareModalShow = false)}
 />
 
@@ -274,14 +277,14 @@
     min-height: 100vh;
   }
   .header_wallet {
-    width: 23vw;
+    min-width: 23vw;
     height: 8vw;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 4vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1vw 0 3vw;
+    padding: 0 3vw;
     font-size: 4vw;
 
     .header_wallet_icon {

@@ -58,13 +58,15 @@
     z-index: 2;
   }
   .header_title {
-    display: flex;
     font-size: 4vw;
     color: #000000;
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
   }
   .header_left,
   .header_right {
-    width: 30%;
+    min-width: 30%;
   }
   .header_right {
     display: flex;

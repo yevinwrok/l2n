@@ -90,12 +90,19 @@
     }
   }
   async function withdrawHandle() {
+    if (checkboxSelect === undefined) {
+      toast("请选择提现方式");
+      return;
+    }
     const res = await withdraw(
       withdrawBtnList[withdrawBtnActive],
       checkboxSelect,
     );
     if (res.data) {
-      location.reload();
+      toast("提现成功");
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     }
   }
 </script>
@@ -111,7 +118,7 @@
         class="withdraw_modal_close"
       />
       <div class="withdraw_modal_title">请绑定{modalDate.name}</div>
-      <div class="withdraw_modal_text">绑定后可提现到{modalDate.name}钱包</div>
+      <div class="withdraw_modal_text">绑定后可提现到{modalDate.name}</div>
       <input
         type="text"
         class="withdraw_modal_input"

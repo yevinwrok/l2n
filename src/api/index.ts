@@ -158,3 +158,7 @@ export function getDateAnalysis(data = {}) {
         data
     )
 }
+
+export function submitSurvey(data: any) {
+    return http.post("/question_survey", data)
+}

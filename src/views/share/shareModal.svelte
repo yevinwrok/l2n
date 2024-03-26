@@ -4,6 +4,7 @@
 
   export let img;
   export let show = false;
+  export let url;
 
   const dispatch = createEventDispatcher();
   function close() {
@@ -36,7 +37,7 @@
       text: "复制链接",
       handler() {
         call("copyLink", {
-          url: "http://www.aixianghome.com",
+          url: url,
         });
       },
     },
@@ -114,6 +115,8 @@
   }
   .share_modal_bottom {
     position: absolute;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
     bottom: 0;
     left: 0;
     width: 100%;

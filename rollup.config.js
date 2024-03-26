@@ -8,6 +8,7 @@ import css from 'rollup-plugin-css-only';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import autoprefixer from "autoprefixer";
+import replace from '@rollup/plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -41,6 +42,10 @@ export default [{
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		replace({
+			preventAssignment: true,
+			"isDev": !production
+		}),
 		svelte({
 			preprocess: sveltePreprocess({
 				sourceMap: false,
@@ -80,7 +85,7 @@ export default [{
 		}),
 		commonjs(),
 		typescript({
-			sourceMap: !production,
+			sourceMap: false,
 			inlineSources: !production
 		}),
 
@@ -109,6 +114,10 @@ production && {
 		file: 'public/build/bundle_second.js'
 	},
 	plugins: [
+		replace({
+			preventAssignment: true,
+			"isDev": !production
+		}),
 		svelte({
 			preprocess: sveltePreprocess({
 				sourceMap: false,
@@ -167,5 +176,5 @@ production && {
 	watch: {
 		clearScreen: false
 	}
-}
+} 
 ];

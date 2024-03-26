@@ -5,10 +5,13 @@ import { isApp, call } from '../bridge';
 import qs from "qs";
 import { getHost } from '../tools';
 const service = axios.create({
-    baseURL: 'https://api.aixiangdaojia.com',
+    // baseURL: 'https://api.aixiangdaojia.com',
+    baseURL: 'https://test.aixiangdaojia.com',
     timeout: 10000,
     withCredentials: false,
 });
+
+
 const tech_path = "/technician/wallet"
 const user_path = "/user/wallet"
 const sys = "/system/"
@@ -23,11 +26,11 @@ service.interceptors.request.use(async (config) => {
             url: config.url,
             method: config.method.toLocaleLowerCase(),
             queryString: qs.stringify(config.params) || undefined,
-            bodyString: config.data
+            bodyString: JSON.stringify(config.data)
         }
-        console.log('getinfo Data: ', callData);
+        console.log('CALL APP[getinfo] send Data: ', callData);
         const res = await call("getinfo", callData)
-        console.log('res header: ', res);
+        console.log('CALL APP[getinfo] get Data:', res);
         headers = res
     } else {
         console.log("not in app");
@@ -109,6 +112,7 @@ export default {
             base_path = BASE_PATH_TYPE_ENUM.sys
         } else {
             let host = getHost()
+            console.log('host: ', host);
             if (host) {
                 base_path = BASE_PATH_TYPE_ENUM[host]
             } else {

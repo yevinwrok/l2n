@@ -1,14 +1,27 @@
 <script lang="ts">
+  import { percent as p } from "../../../tools/price";
+
   export let num: string | number = "-";
   export let text: string = "";
   export let center = false;
   export let percent = false;
+
+  function handler(num) {
+    if (num === undefined) {
+      return "-";
+    } else {
+      if (percent) {
+        return p(num);
+      } else {
+        return num;
+      }
+    }
+  }
 </script>
 
 <div class="invite_box" style={center ? "align-items:center" : ""}>
   <div class="invite_num">
-    {num === undefined ? "-" : num}
-    {percent ? "%" : ""}
+    {handler(num)}
   </div>
   <div class="invite_text">{text}</div>
 </div>

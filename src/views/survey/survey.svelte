@@ -1,8 +1,21 @@
 <script lang="ts">
+  import { submitSurvey } from "../../api";
+  import { call } from "../../bridge";
   import toast from "../../tools/toast";
   import { surveyList } from "./helper";
+
   let sl = JSON.parse(JSON.stringify(surveyList));
   let showCoupon = false;
+  let showCity = false;
+  let couponData = {
+    coupon_name: "", //优惠券名称
+    tag: "", //标签
+    coupon_price: 0, //优惠券价格
+    detail_describe: "", //描述
+  };
+  function useCoupon() {
+    call("useCoupon", {});
+  }
 
   function back() {
     window.history.go(-1);
@@ -24,7 +37,7 @@
   function radioClick(item, opt) {
     if (item.type === "s") {
       item.options.forEach((o) => {
-        if (o.value !== opt.value) {
+        if (o.label !== opt.label) {
           o.checked = false;
           if (o.input_value) o.input_value = "";
         } else {
@@ -33,41 +46,99 @@
       });
     } else {
       opt.checked = !opt.checked;
+      if (item.sort) {
+        opt.sort = Date.now();
+      }
     }
     const index = sl.findIndex((i) => i.title === item.title);
     sl[index] = item;
   }
 
   function submit() {
+    const data = {};
+    let flag = true;
     for (let i = 0; i < sl.length; i++) {
       let item = sl[i];
-      console.log(item.title);
       if (item.type === "i") {
-        console.log("value", item.input_value);
-      } else {
-        let res = item.options.filter((item) => item.checked);
-        if (res.length) {
-          for (let j = 0; j < res.length; j++) {
-            let opt = res[j];
-            if (opt.input) {
-              if (!opt.input_value) {
-                toast("请填写完整");
-                break;
-              }
-              console.log(opt.label);
-              console.log(opt.input_value);
-            } else {
-              console.log(opt.label);
-              console.log(opt.value);
-            }
-          }
-        } else {
+        isInput(item, data);
+      } else if (item.type === "m") {
+        const res = isMultiple(item, data);
+        if (!res) {
           toast("请回答完整");
+          flag = false;
+          break;
+        }
+      } else if (item.type === "s") {
+        const res = isSingle(item, data);
+        if (!res) {
+          toast("请回答完整");
+          flag = false;
           break;
         }
       }
-      showCoupon = true;
     }
+
+    if (flag) {
+      const p = {};
+      Object.keys(data).forEach((key) => {
+        if (typeof data[key] === "string") {
+          p[key] = data[key];
+        } else {
+          p[key] = data[key].join(",");
+        }
+      });
+      submitSurvey(p).then((res) => {
+        couponData = res;
+        showCoupon = true;
+      });
+    }
+  }
+
+  function isInput(item, data) {
+    if (item.input_value) data[item.field] = item.input_value;
+  }
+
+  function isMultiple(item, data): boolean {
+    let res = item.options
+      .filter((item) => item.checked)
+      .sort((a, b) => a.sort - b.sort);
+    data[item.field] = [];
+    if (res.length) {
+      for (let j = 0; j < res.length; j++) {
+        let opt = res[j];
+        if (opt.input) {
+          if (!opt.input_value) {
+            toast("请填写完整");
+            return false;
+          }
+          data[item.field].push(opt.input_value);
+        } else {
+          data[item.field].push(opt.label);
+        }
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+
+  function isSingle(item, data): boolean {
+    let res = item.options.filter((item) => item.checked);
+    if (res && res[0]) {
+      if (res[0].input) {
+        if (!res[0].input_value) {
+          return false;
+        } else {
+          data[item.field] = res[0].input_value;
+        }
+      } else {
+        data[item.field] = res[0].label;
+      }
+    } else {
+      return false;
+    }
+
+    return true;
   }
 </script>
 
@@ -113,6 +184,18 @@
             placeholder="请填写您的建议"
             bind:value={item.input_value}
           ></textarea>
+        {:else if item.type === "d"}
+          <input class="inline_input" disabled placeholder="点击可选择城市" />
+        {/if}
+
+        {#if item.sort}
+          <div style="margin-top: 2vw;font-size:2.5vw;color:rgb(150 150 150);">
+            可以根据您在乎程度进行排序 <br />{item.options
+              .filter((i) => i.checked)
+              .sort((a, b) => a.sort - b.sort)
+              .map((i, idx) => ` ${idx + 1}.` + i.label)
+              .join("")}
+          </div>
         {/if}
       {/each}
       <button class="survey_main_btn" on:click={submit}>提交问卷</button>
@@ -123,18 +206,31 @@
   <div class="coupon">
     <div class="coupon_main">
       <div class="coupon_main_title">参与奖励</div>
-      <div class="coupon_main_info">感谢您的参与，您的20元优惠券已发放</div>
-      <img
-        src="./assets/hybrid/img_coupon_card.png"
-        alt=""
-        class="coupon_main_center"
-      />
+      <div class="coupon_main_info">
+        感谢您的参与，您的{couponData.coupon_price}元优惠券已发放
+      </div>
+      <div class="coupon_main_center">
+        <img
+          src="./assets/hybrid/img_coupon_card.png"
+          alt=""
+          class="coupon_main_center_img"
+        />
+        <div class="title">{couponData.coupon_name}</div>
+        <div class="info">{couponData.detail_describe}</div>
+        <div class="price">
+          <span class="symbol">￥</span>{couponData.coupon_price}
+        </div>
+        <div class="tag">{couponData.tag}</div>
+      </div>
       <div class="coupon_main_btns">
         <button class="coupon_main_btn white" on:click={back}>好的</button>
-        <button class="coupon_main_btn" on:click={back}>去使用</button>
+        <button class="coupon_main_btn" on:click={useCoupon}>去使用</button>
       </div>
     </div>
   </div>
+{/if}
+{#if showCity}
+  <div class=""></div>
 {/if}
 
 <style scoped>
@@ -169,6 +265,53 @@
     width: 59.5vw;
     height: 18.6vw;
     margin-top: 7vw;
+    position: relative;
+  }
+  .coupon_main_center .title {
+    position: absolute;
+    top: 4.2vw;
+    left: 3.3vw;
+    font-weight: 800;
+    font-size: 3.3vw;
+    color: #3d3d3d;
+  }
+  .coupon_main_center .info {
+    position: absolute;
+    font-size: 3vw;
+    color: #7f7f8e;
+    bottom: 3.6vw;
+    left: 3.3vw;
+  }
+
+  .coupon_main_center .price {
+    position: absolute;
+    font-weight: bold;
+    font-size: 5.6vw;
+    color: #ff2d51;
+    top: 2.6vw;
+    right: 4.9vw;
+  }
+  .coupon_main_center .symbol {
+    font-size: 2.8vw;
+  }
+
+  .coupon_main_center .tag {
+    position: absolute;
+    bottom: 3.5vw;
+    right: 3.5vw;
+    background: #fff2d1;
+    border-radius: 9px;
+    border: 2px solid #c19c53;
+    font-weight: bold;
+    font-size: 2.8vw;
+    color: #c19c53;
+    min-width: 11.6vw;
+    height: 4.7vw;
+  }
+  .coupon_main_center_img {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
   .coupon_main_btns {
     display: flex;

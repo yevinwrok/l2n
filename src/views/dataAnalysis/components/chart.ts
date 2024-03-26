@@ -75,7 +75,7 @@ export function mkOpt(params: EChartsOption = {}): EChartsOption {
         },
         grid: {
             left: '3%',
-            right: '4%',
+            right: '6%',
             bottom: '4%',
             top: "10%",
             containLabel: true

@@ -42,13 +42,13 @@
     <ITL num={shareDetail.order_user_cnt} text="下单用户数(人)" />
   </div>
   <div class="invite_total_item block">
-    <ITL num="{shareDetail.order_user_rate}%" text="下单用户占比" />
+    <ITL num="{shareDetail.order_user_rate}" text="下单用户占比" percent />
   </div>
   <div class="invite_total_item block">
     <ITL num={shareDetail.order_technician_cnt} text="接单技师数(人)" />
   </div>
   <div class="invite_total_item block">
-    <ITL num="{shareDetail.order_technician_rate}%" text="接单技师占比" />
+    <ITL num={shareDetail.order_technician_rate} text="接单技师占比" percent />
   </div>
 </div>
 <InviteTable></InviteTable>

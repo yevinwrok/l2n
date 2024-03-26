@@ -3,6 +3,7 @@
   import Chart from "./components/chart.svelte";
   import ITL from "./components/inviteTotalLayout.svelte";
   import { getDateAnalysis } from "../../api";
+  import { percent } from "../../tools/price";
   let analysisDetail = {} as any;
   let trend = [];
   let t = [];
@@ -59,7 +60,7 @@
   <div class="dynamic">
     动态退单率：{analysisDetail.refund_rate === undefined
       ? "-"
-      : analysisDetail.refund_rate}%
+      : percent(analysisDetail.refund_rate)}
     <img src="./assets/hybrid/icon_help.png" alt="" />
   </div>
   <div class="invite_total">

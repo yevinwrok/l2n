@@ -25,7 +25,7 @@
           console.log(1);
           clearInterval(timer);
           r(void 0);
-        } else if (Date.now() - start > 30) {
+        } else if (Date.now() - start > 3000) {
           clearInterval(timer);
           r(void 0);
         }
