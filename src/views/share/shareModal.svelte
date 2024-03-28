@@ -1,11 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { call } from "../../bridge";
-
+  import { isIos } from "../../tools";
   export let img;
   export let show = false;
   export let url;
-
+  const isios = isIos();
   const dispatch = createEventDispatcher();
   function close() {
     dispatch("close", true);
@@ -56,7 +56,7 @@
 {#if show}
   <div class="share_modal">
     <img src={img} alt="" class="share_img" />
-    <div class="share_modal_bottom">
+    <div class="share_modal_bottom {isios ? 'ios' : ''}">
       <div class="share_btns">
         {#each btnConfig as config}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -115,8 +115,6 @@
   }
   .share_modal_bottom {
     position: absolute;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
     bottom: 0;
     left: 0;
     width: 100%;
@@ -125,5 +123,8 @@
     border-radius: 28px 28px 0px 0px;
     display: flex;
     flex-direction: column;
+  }
+  .ios {
+    padding-bottom: 49vw;
   }
 </style>

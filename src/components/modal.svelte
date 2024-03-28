@@ -22,6 +22,7 @@
   .modal {
     position: fixed;
     width: 100vw;
+    z-index: 888;
     height: 100vh;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.5);

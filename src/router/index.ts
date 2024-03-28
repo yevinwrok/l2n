@@ -13,12 +13,16 @@ export const hybrid = {
     "/share/index": Share,
     "/share/withdraw": Withdraw,
     "/share/rewards_history": RewardsHistory,
-    "/share/invite_history": InviteHistory,
+    "/share/invite_history/:type": InviteHistory,
     "/data_analysis": DataAnalysis,
     "/accredit": Accredit,
     "/survey": Survey,
     "/content/signature": ContentSignature,
 }
+
+export const hybridList = Object.keys(hybrid).map(item=>{
+    return item.split(":")[0]
+})
 
 const routes = {
     "/": Homepage,

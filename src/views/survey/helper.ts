@@ -45,6 +45,7 @@ export const surveyList = [
         title: "您所在城市",
         type: "d",
         field: "city",
+        input_value: ""
     },
     {
         title: "您用过其他上门服务按摩吗",

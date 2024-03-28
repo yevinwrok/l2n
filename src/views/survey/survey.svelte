@@ -61,6 +61,13 @@
       let item = sl[i];
       if (item.type === "i") {
         isInput(item, data);
+      } else if (item.type === "d") {
+        if (!item.input_value) {
+          toast("请回答完整");
+          flag = false;
+          break;
+        }
+        isInput(item, data);
       } else if (item.type === "m") {
         const res = isMultiple(item, data);
         if (!res) {
@@ -140,6 +147,13 @@
 
     return true;
   }
+  async function selectCity() {
+    const res: any = await call("selectCity", {});
+    const index = sl.findIndex((i) => i.type === "d");
+    const item = sl[index];
+    item.input_value = res.city;
+    sl[index] = item;
+  }
 </script>
 
 <div class="survey">
@@ -185,7 +199,15 @@
             bind:value={item.input_value}
           ></textarea>
         {:else if item.type === "d"}
-          <input class="inline_input" disabled placeholder="点击可选择城市" />
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <div on:click={selectCity}>
+            <input
+              class="inline_input"
+              style="pointer-events: none;"
+              placeholder="点击可选择城市"
+              bind:value={item.input_value}
+            />
+          </div>
         {/if}
 
         {#if item.sort}
@@ -408,12 +430,12 @@
   .survey_main_select .radio_box {
     display: flex;
     flex-direction: column;
-    gap: 2vw;
   }
   .radio_item {
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-bottom: 3vw;
   }
   .survey_main_select .radio {
     display: inline-block;

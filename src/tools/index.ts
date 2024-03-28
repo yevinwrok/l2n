@@ -13,3 +13,7 @@ export function getHost(): 'tech' | 'user' | undefined {
     console.log('query: ', query);
     return query.type
 }
+
+export function isIos(): boolean {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}

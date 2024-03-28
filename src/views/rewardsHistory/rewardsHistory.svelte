@@ -28,80 +28,10 @@
         limit,
       );
       data = data.concat(res.data);
-      // hasMore =
+      hasMore = res.page.total_page > page;
     } finally {
       loading = false;
     }
-    // setTimeout(() => {
-    //   loading = false;
-    //   data = data.concat([
-    //     {
-    //       id: 4, //id
-    //       create_time: 1707915594430, //时间
-    //       recorded_time: null,
-    //       estimate_recorded_time: null,
-    //       price: -10, //价格
-    //       balance: 134, //余额
-    //       title: "提现", //标题
-    //       type: 2,
-    //       source: 6,
-    //       status: null,
-    //       related_id: null,
-    //     },
-    //     {
-    //       id: 4, //id
-    //       create_time: 1707915594430, //时间
-    //       recorded_time: null,
-    //       estimate_recorded_time: null,
-    //       price: -10, //价格
-    //       balance: 134, //余额
-    //       title: "提现", //标题
-    //       type: 2,
-    //       source: 6,
-    //       status: null,
-    //       related_id: null,
-    //     },
-    //     {
-    //       id: 4, //id
-    //       create_time: 1707915594430, //时间
-    //       recorded_time: null,
-    //       estimate_recorded_time: null,
-    //       price: -10, //价格
-    //       balance: 134, //余额
-    //       title: "提现", //标题
-    //       type: 2,
-    //       source: 6,
-    //       status: null,
-    //       related_id: null,
-    //     },
-    //     {
-    //       id: 4, //id
-    //       create_time: 1707915594430, //时间
-    //       recorded_time: null,
-    //       estimate_recorded_time: null,
-    //       price: -10, //价格
-    //       balance: 134, //余额
-    //       title: "提现", //标题
-    //       type: 2,
-    //       source: 6,
-    //       status: null,
-    //       related_id: null,
-    //     },
-    //     {
-    //       id: 4, //id
-    //       create_time: 1707915594430, //时间
-    //       recorded_time: null,
-    //       estimate_recorded_time: null,
-    //       price: -10, //价格
-    //       balance: 134, //余额
-    //       title: "提现", //标题
-    //       type: 2,
-    //       source: 6,
-    //       status: null,
-    //       related_id: null,
-    //     },
-    //   ]);
-    // }, 2000);
   }
   $: {
     if (inputMonth) {
@@ -113,7 +43,7 @@
   }
 </script>
 
-<HyNav title="收支明细"></HyNav>
+<HyNav title="收支明细" bgc_fff></HyNav>
 <div class="rewardsHistory">
   <div class="rewardsHistory_month">
     <div class="rewardsHistory_month_header">
@@ -133,7 +63,7 @@
           <div
             style={item.price.toString().startsWith("-") ? "color:red;" : ""}
           >
-            {item.price}
+            {item.price.toString().startsWith("-") ? "" : "+"}{item.price}
           </div>
         </div>
         <div class="rewardsHistory_month_item_sub_info">
@@ -205,9 +135,14 @@
       position: relative;
       .month {
         position: absolute;
-        width: 6vw;
+        width: 30vw;
         right: 1vw;
         opacity: 0;
+      }
+      .month::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 0;
+        padding-left: 100%; //布满整个文本框
       }
       img {
         width: 3.5vw;

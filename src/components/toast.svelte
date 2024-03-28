@@ -31,7 +31,7 @@
     background-color: #3333337e;
     color: #fff;
     padding: 2vw 4vw;
-    font-size: 4vw;
+    font-size: 3vw;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     text-align: center;

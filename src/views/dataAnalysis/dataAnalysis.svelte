@@ -4,6 +4,7 @@
   import ITL from "./components/inviteTotalLayout.svelte";
   import { getDateAnalysis } from "../../api";
   import { percent } from "../../tools/price";
+    import message from "../../tools/message";
   let analysisDetail = {} as any;
   let trend = [];
   let t = [];
@@ -23,8 +24,13 @@
     });
   }
 
+
   function clone(a: any) {
     return JSON.parse(JSON.stringify(a));
+  }
+
+  function showRefund(){
+    message("动态退单率:近30天(退单的订单/总订单)<br /><br />*每天上午9点更新最新数据",()=>{})
   }
   $: {
     if (active) {
@@ -61,7 +67,8 @@
     动态退单率：{analysisDetail.refund_rate === undefined
       ? "-"
       : percent(analysisDetail.refund_rate)}
-    <img src="./assets/hybrid/icon_help.png" alt="" />
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <img src="./assets/hybrid/icon_help.png" alt="" on:click={showRefund} />
   </div>
   <div class="invite_total">
     <div class="invite_total_item block_full">

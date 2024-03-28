@@ -5,6 +5,7 @@
   export let text: string = "";
   export let center = false;
   export let percent = false;
+  export let m = false;
 
   function handler(num) {
     if (num === undefined) {
@@ -21,6 +22,7 @@
 
 <div class="invite_box" style={center ? "align-items:center" : ""}>
   <div class="invite_num">
+    {m ? "¥" : ""}
     {handler(num)}
   </div>
   <div class="invite_text">{text}</div>

@@ -1,10 +1,16 @@
 <script lang="ts">
   import { replace } from "svelte-spa-router";
   import { isMobile } from "../../store";
+  import { getDownload } from "../../api/index";
   import qs from "qs";
   import copyText from "../../tools/copy";
+  import { isIos } from "../../tools";
   let href = window.location.href;
   let p = href.split("?") ? href.split("?")[1] : "";
+  let downloadUrl = {
+    ios: "",
+    android: "",
+  };
   let query = (qs.parse(p, { ignoreQueryPrefix: true }) as {
     invitor: string;
     clip: string;
@@ -21,9 +27,22 @@
       copyText(`${query.clip}:${query.invitor}`);
     }
     // 埋点
-    // 如果是安卓
     // 如果是ios
+    if (isIos()) {
+      window.location.href = downloadUrl.ios;
+    } else {
+      // 如果是安卓
+      window.location.href = downloadUrl.android;
+    }
   }
+
+  getDownload().then((res) => {
+    if (res.data) {
+      downloadUrl.ios = res.data.ios_url;
+      downloadUrl.android = res.data.android_url;
+    }
+    console.log(res);
+  });
 </script>
 
 <div class="landingpage">

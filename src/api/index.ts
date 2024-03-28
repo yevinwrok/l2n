@@ -1,5 +1,5 @@
 import type { ECheckboxSelect } from "../views/withdraw/helper";
-import http, { BASE_PATH_TYPE_ENUM } from "./http";
+import http, { BASE_PATH_TYPE_ENUM, baseUrl } from "./http";
 
 
 interface IShareIntro {
@@ -44,10 +44,12 @@ export interface IShareDetail {
     order_technician_cnt: number;
     order_technician_rate: number;
 }
-export function getShareDetail(): Promise<IShareDetail> {
+export function getShareDetail(type): Promise<IShareDetail> {
     return http.get(
         "/invitation_statistic",
-        {}
+        {
+            type
+        }
     )
 }
 
@@ -70,17 +72,19 @@ export interface IRewarded {
     }[]
 }
 export function getRewarded({
-    type, page, limit = 20
+    todayType, type, page, limit = 20
 }: {
     type: "rewarded" | "unrewarded",
     page: number,
     limit: number,
+    todayType: "TODAY" | "ALL",
 }): Promise<IRewarded> {
     return http.post(
         type === 'rewarded' ? "/invitation_award_list" : "/invitation_no_award_list",
         {
             page,
-            limit
+            limit,
+            type: todayType
         }
     )
 }
@@ -161,4 +165,8 @@ export function getDateAnalysis(data = {}) {
 
 export function submitSurvey(data: any) {
     return http.post("/question_survey", data)
+}
+
+export function getDownload() {
+    return fetch(baseUrl + "/system/download").then(res => res.json())
 }

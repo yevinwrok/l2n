@@ -7,6 +7,11 @@
   let active: tableType = tableType.rewarded;
   let rewardedCnt = 0;
   let init = true;
+  export let params = {
+    type: "ALL",
+  } as {
+    type: "ALL" | "TODAY";
+  };
   let page = 0,
     hasMore = false,
     rewarded: IRewarded["data"] = [],
@@ -30,6 +35,7 @@
       page = 0;
     }
     getRewarded({
+      todayType: params.type.toUpperCase() as any,
       page: ++page,
       limit: 100,
       type: active,
@@ -134,7 +140,7 @@
 </div>
 
 <style lang="scss">
-  .no_data{
+  .no_data {
     text-align: center;
     color: #ccc;
     margin-top: 20vw;
@@ -183,6 +189,7 @@
     color: #aaa;
     margin-top: 6vw;
     font-size: 3.5vw;
+    margin-bottom: 10vw;
   }
 
   .table_tab {

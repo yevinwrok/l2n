@@ -4,9 +4,10 @@ import toast from "../tools/toast"
 import { isApp, call } from '../bridge';
 import qs from "qs";
 import { getHost } from '../tools';
+export const baseUrl = "https://test.aixiangdaojia.com"
+// baseURL: 'https://api.aixiangdaojia.com',
 const service = axios.create({
-    // baseURL: 'https://api.aixiangdaojia.com',
-    baseURL: 'https://test.aixiangdaojia.com',
+    baseURL: baseUrl,
     timeout: 10000,
     withCredentials: false,
 });

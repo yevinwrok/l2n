@@ -12,15 +12,19 @@
     withdrawTypeList,
   } from "./helper";
   import { call } from "../../bridge";
+  import { getHost } from "../../tools";
 
   $: {
     if (!$isMobile) replace("/");
   }
-
+  let host = getHost();
   let userInfo = {
     balance: 0,
     ali_account: "",
     wechat_nickname: "",
+    withdrawn: 0,
+    margin: 0,
+    order_balance: 0,
   };
   let withdrawBtnList = [];
   let withdrawBtnActive = 0;
@@ -28,21 +32,29 @@
   let showModal: boolean = false;
   let modalDate: WithdrawTypeListItem;
   let name, account_1, account_2;
+  let loading = true;
 
-  wallet().then((res) => {
-    withdrawBtnList = res.withdraw_price || [];
-    userInfo = {
-      balance: res.balance,
-      ali_account: res.ali_account,
-      wechat_nickname: res.wechat_nickname,
-    };
+  wallet()
+    .then((res) => {
+      withdrawBtnList = res.withdraw_price || [];
+      userInfo = {
+        balance: res.balance,
+        ali_account: res.ali_account,
+        wechat_nickname: res.wechat_nickname,
+        withdrawn: res.withdrawn || 0,
+        margin: res.margin || 0,
+        order_balance: res.order_balance || 0,
+      };
 
-    if (res.ali_account) {
-      checkboxSelect = ECheckboxSelect.alipay;
-    } else if (res.wechat_nickname) {
-      checkboxSelect = ECheckboxSelect.wechat;
-    }
-  });
+      if (res.ali_account) {
+        checkboxSelect = ECheckboxSelect.alipay;
+      } else if (res.wechat_nickname) {
+        checkboxSelect = ECheckboxSelect.wechat;
+      }
+    })
+    .finally(() => {
+      loading = false;
+    });
 
   async function withdrawTypeClick(wtl: WithdrawTypeListItem) {
     if (wtl.type === ECheckboxSelect.wechat) {
@@ -76,7 +88,7 @@
     }
 
     if (account_1 !== account_2) {
-      toast(`请填写您的${modalDate.name}账号不一致`);
+      toast(`${modalDate.name}账号不一致`);
       return;
     }
 
@@ -98,12 +110,16 @@
       withdrawBtnList[withdrawBtnActive],
       checkboxSelect,
     );
-    if (res.data) {
-      toast("提现成功");
+    if (res) {
+      toast("申请成功，审核成功后到账");
       setTimeout(() => {
         location.reload();
-      }, 3000);
+      }, 300);
     }
+  }
+
+  function toMargin() {
+    call("toMargin", {});
   }
 </script>
 
@@ -156,15 +172,22 @@
 
 <div class="withdraw">
   <div class="current">
-    <div class="current_amount">￥{userInfo.balance}</div>
-    <div class="current_text">当前余额(元)</div>
+    <div class="current_amount">￥{userInfo.withdrawn}</div>
+    <div class="current_text">可提现金额(元)</div>
+    {#if userInfo.margin === 0 && loading === false && host === "tech"}
+      <div class="red">
+        保证金余额为0,接单提成暂无法提现,冻结金额:¥{userInfo.order_balance}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <span class="blue" on:click={toMargin}>缴纳保证金</span>
+      </div>
+    {/if}
   </div>
   <div class="withdraw_subtitle">请选择提现金额</div>
   <div class="withdraw_btns">
     {#each withdrawBtnList as money, idx}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class={`withdraw_btn ${withdrawBtnActive === idx ? "active" : ""}`}
+        class={`withdraw_btn ${withdrawBtnActive === idx ? "active" : ""} ${(idx + 1) % 3=== 0 ? "specific" : ""}`}
         on:click={() => (withdrawBtnActive = idx)}
       >
         {money}元
@@ -321,7 +344,6 @@
   .withdraw_btns {
     display: flex;
     flex-wrap: wrap;
-    gap: 3vw;
     .withdraw_btn {
       font-weight: 800;
       width: 29vw;
@@ -331,8 +353,14 @@
       border-radius: 2vw;
       text-align: center;
       background: #f7f8fa;
+      margin-bottom: 3vw;
+      margin-right: 3vw;
       &.active {
         background: linear-gradient(-90deg, #f1ff79, #b4fc15);
+      }
+
+      &.specific {
+        margin-right: 0vw;
       }
     }
   }
@@ -346,11 +374,22 @@
   .current {
     margin-top: 4vw;
     width: 100%;
-    height: 23vw;
+    min-height: 23vw;
     background: #f7f8fa;
     border-radius: 2vw;
     padding-top: 5vw;
     padding-left: 5vw;
+    padding-bottom: 1.4vw;
+
+    .red {
+      color: red;
+      font-size: 2.5vw;
+      margin-top: 0.8vw;
+    }
+    .blue {
+      color: blue;
+      text-decoration: underline;
+    }
 
     .current_amount {
       font-weight: 800;

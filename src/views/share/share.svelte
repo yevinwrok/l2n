@@ -11,6 +11,7 @@
     inviteShare,
   } from "../../api/index";
   import toast from "../../tools/toast";
+  import message from "../../tools/message";
   $: {
     if (!$isMobile) replace("/");
   }
@@ -40,7 +41,15 @@
     //   "李兰兰 昨日通过邀请获得￥3728元",
     //   "李兰兰 昨日通过邀请获得￥3728元",
     // ];
-    inviteRecords = res || [];
+    if (res.length) {
+      let _res = [];
+      for (let i = 0; i < 999; i++) {
+        _res = _res.concat(res);
+      }
+      inviteRecords = _res;
+    } else {
+      inviteRecords = [];
+    }
 
     await tick();
     const children = carouselRef.querySelectorAll(".carousel_item");
@@ -79,7 +88,21 @@
       }
     });
   }
-
+  function showRules() {
+    message("", () => {});
+  }
+  function showStrategy() {
+    message(
+      `口碑推荐：向朋友、家人、同事等身边的人推荐该产品，并邀请他们使用。<br />社交媒体分享：利用社交媒体平台，如微信、微博、QQ等，发布关于产品或服务的信息、评价或推荐，并在帖子中附上你的邀请链接。<br />内容创作：通过写博客、制作视频、开设专栏等形式，分享你对产品或服务的使用经验、评测、教程等内容，吸引潜在用户，并在内容中加入你的邀请链接。<br />参加推广活动：该产品会定期举办推广活，你可以积极参与并邀请更多人加入活动，从而获得额外的奖励或佣金。<br />线下推广：参加展会、活动或社区聚会等场合，与人交流并推荐该产品。你可以分发海报同时提供你的邀请链接。<br />建立个人推广网站或博客：创建一个专门用于分享改产品的网站或博客，引导他们通过你的链接下载使用。`,
+      () => {},
+    );
+  }
+  function showHelp() {
+    message(
+      `用户需要每个月通过邀请赚钱赚得5000元即可申请合伙人，合伙人的期限为3个月，过期后用户可重新申请合伙人身份，如有疑问可咨询在线客服`,
+      () => {},
+    );
+  }
   onDestroy(() => {
     clearTimeout(tm);
   });
@@ -113,7 +136,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="top_data_item_text"
-          on:click={() => push("/share/invite_history")}
+          on:click={() => push("/share/invite_history/today")}
         >
           今日奖励
           <img src="./assets/hybrid/icon_arrow_1.png" alt="" />
@@ -124,7 +147,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="top_data_item_text"
-          on:click={() => push("/share/invite_history")}
+          on:click={() => push("/share/invite_history/all")}
         >
           累计奖励<img src="./assets/hybrid/icon_arrow_1.png" alt="" />
         </div>
@@ -165,7 +188,8 @@
     </div>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="share_black_btn" on:click={share}>邀请赚钱</div>
-    <div class="share_gray_info">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="share_gray_info" on:click={showRules}>
       注：被邀请用户可随意切换用户/技师身份，只要邀请成功，可以
       同时享受两种身份的金额分成奖励... 查看活动规则<img
         src="./assets/hybrid/icon_arrow_1.png"
@@ -175,6 +199,13 @@
     </div>
   </div>
   <div class="partner">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <img
+      src="./assets/hybrid/icon_help.png"
+      alt=""
+      class="partner_help"
+      on:click={showHelp}
+    />
     <img
       src="./assets/hybrid/img_share_assets_2.png"
       alt=""
@@ -182,7 +213,8 @@
     />
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="share_black_btn" on:click={apply}>申请市场合伙人</div>
-    <div class="share_gray_info">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="share_gray_info" on:click={showStrategy}>
       邀请攻略：向朋友、家人、同事等身边的人推荐该产品，并邀请
       他们使用...更多邀请攻略<img
         src="./assets/hybrid/icon_arrow_1.png"
@@ -200,11 +232,21 @@
 />
 
 <style lang="scss" scoped>
+  .partner {
+    position: relative;
+  }
   .partner_img {
     width: 68vw;
     height: 29vw;
     margin: 9vw auto 7vw;
     display: block;
+  }
+  .partner_help {
+    width: 4vw;
+    height: 4vw;
+    position: absolute;
+    top: 1vw;
+    right: 30vw;
   }
   .share_gray_info {
     width: 86vw;

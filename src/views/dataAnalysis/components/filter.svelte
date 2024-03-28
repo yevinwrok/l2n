@@ -112,6 +112,7 @@
     height: 100vh;
     top: 0;
     left: 0;
+    z-index: 99999998;
   }
   .filter {
     display: flex;
@@ -119,7 +120,7 @@
     padding: 1.2vw 3.5vw;
     position: relative;
     background: #fff;
-    z-index: 9;
+    z-index: 99999999;
 
     .filtrate_exp_btn {
       width: 100%;
@@ -152,7 +153,7 @@
       position: absolute;
       width: 100%;
       left: 0;
-      z-index: 9;
+      z-index: 99999999;
       display: flex;
       flex-wrap: wrap;
       background: #fff;

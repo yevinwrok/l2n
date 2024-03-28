@@ -1,22 +1,18 @@
 <script lang="ts">
   import { pop, location } from "svelte-spa-router";
+    import { hybridList } from "../router";
   export let title = "";
   export let hideBack = false;
   export let backFn = pop;
-
-  let fillerHeaderList = [
-    "/share/index",
-    "/share/withdraw",
-    "/share/rewards_history",
-    "/share/invite_history",
-  ];
+  export let bgc_fff = false;
+  
   let fillerHeader = false;
   $: {
-    fillerHeader = fillerHeaderList.includes($location);
+    fillerHeader = hybridList.findIndex((k) => $location.startsWith(k)) !== -1;
   }
-</script>
+</script> 
 
-<nav class="header">
+<nav class="header {bgc_fff ? 'bgc_fff' : ''}">
   {#if fillerHeader}
     <div class="header_filter"></div>
   {/if}
@@ -44,12 +40,16 @@
     width: 100%;
     flex-grow: 1;
   }
+  .bgc_fff{
+    background: #fff;
+  }
   .header {
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 4vw;
+    padding-bottom: 3vw;
     min-height: 12vw;
     flex-wrap: wrap;
     position: sticky;

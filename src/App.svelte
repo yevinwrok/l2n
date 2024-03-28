@@ -3,20 +3,20 @@
   import routes from "./router/index";
   import Layout from "./components/layout.svelte";
   import { location } from "svelte-spa-router";
-  import { hybrid } from "./router/index";
+  import { hybrid, hybridList } from "./router/index";
   import { isMobile } from "./store";
   import { setContext } from "svelte";
   export let theSecond = false;
   import Toast from "./components/toast.svelte";
-
+  import Message from "./components/message.svelte";
   setContext("theSecond", theSecond);
   let p;
-  let showLayout = Object.keys(hybrid).findIndex((k) => k === $location) === -1;
+  let showLayout = hybridList.findIndex((k) => $location.startsWith(k)) === -1;
   $: {
-    showLayout = Object.keys(hybrid).findIndex((k) => k === $location) === -1;
+    showLayout = hybridList.findIndex((k) => $location.startsWith(k)) === -1;
   }
 
-  if (Object.keys(hybrid).findIndex((k) => k === $location) != -1) {
+  if (!showLayout) {
     p = new Promise((r) => {
       let start = Date.now();
       let timer = setInterval(() => {
@@ -48,6 +48,7 @@
   {#await p then}
     <main class="hybrid_content">
       <Toast></Toast>
+      <Message></Message>
       <Router {routes} />
     </main>
   {/await}
