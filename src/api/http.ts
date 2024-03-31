@@ -1,17 +1,16 @@
 import axios, { type AxiosRequestConfig, type AxiosRequestHeaders, type AxiosResponse } from 'axios';
+import qs from "qs";
 import { config } from '../config/index';
 import toast from "../tools/toast"
 import { isApp, call } from '../bridge';
-import qs from "qs";
 import { getHost } from '../tools';
-export const baseUrl = "https://test.aixiangdaojia.com"
-// baseURL: 'https://api.aixiangdaojia.com',
+
+export const baseUrl = API_URL_MOD
 const service = axios.create({
     baseURL: baseUrl,
     timeout: 10000,
     withCredentials: false,
 });
-
 
 const tech_path = "/technician/wallet"
 const user_path = "/user/wallet"

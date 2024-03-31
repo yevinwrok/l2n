@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "rollup -c --environment API_URL:https://api.aixiangdaojia.com",
+    "build:dev": "rollup -c --environment API_URL:https://test.aixiangdaojia.com",
+    "dev": "rollup -c -w --environment API_URL:https://test.aixiangdaojia.com",
+    "dev:prod": "rollup -c -w --environment API_URL:https://api.aixiangdaojia.com",
     "start": "sirv public --no-clear",
     "check": "svelte-check"
   },
