@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   /**
    * INSTALL
    * yarn add dayjs
@@ -14,12 +14,13 @@
    */
 
   import { createEventDispatcher, onMount } from "svelte";
-  import dayjs from "dayjs";
+  import dayjs, { Dayjs } from "dayjs";
   import "dayjs/locale/fr";
 
   export let initTime = Date.now();
   export let format = "YYYY/MM/DD";
-
+  export let start: Dayjs;
+  export let end: Dayjs;
   // data
   const dispatch = createEventDispatcher();
   let elModal; // HTMLElement
@@ -32,7 +33,24 @@
   let selectedMonth = +dayjs(initTime).format("M"); // 1..12
   let selectedYear = +dayjs(initTime).format("YYYY"); // 2021...
   let rows = initRows();
+  let monthMS = 2_592_000_000;
+  function disabledHandle(year, month, day) {
+    let day1 = dayjs(`${year}/${month}/${day}`).valueOf();
+    let now = Date.now();
+    if (day1 > now) {
+      return true;
+    }
 
+    if (day1.valueOf() > start.valueOf() + monthMS) {
+      return true;
+    }
+
+    if (day1.valueOf() < end.valueOf() - monthMS) {
+      return true;
+    }
+
+    return false;
+  }
   // props
   //   export let customclass = "";
 
@@ -239,7 +257,12 @@
                             {:else}
                               <p class="text-base text-gray-500 font-medium">
                                 <button
-                                  class="border-none"
+                                  class="border-none btn-item"
+                                  disabled={disabledHandle(
+                                    selectedYear,
+                                    selectedMonth,
+                                    i,
+                                  )}
                                   on:click={() => {
                                     selectDate(selectedYear, selectedMonth, i);
                                   }}
@@ -275,4 +298,7 @@
 <!-- <input type="text" bind:value={inputTxt} class={customclass} /> -->
 
 <style>
+  .btn-item:disabled {
+    opacity: 0.3;
+  }
 </style>

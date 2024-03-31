@@ -6,6 +6,7 @@ export const message = writable({
     show: false,
     text: "",
     fn: undefined,
+    title: "",
 })
 let now = isMobileDevice$1()
 window.addEventListener("resize", throttle(() => {

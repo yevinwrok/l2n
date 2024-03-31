@@ -7,7 +7,7 @@
   let start = dayjs().startOf("month"),
     end = dayjs().endOf("month");
 
-  export let active = new Set(["all"]);
+  export let active = new Set(["total_commission"]);
   let isExp = false;
   function d() {
     return {
@@ -58,6 +58,8 @@
       <DataPicker
         initTime={start.valueOf()}
         format="YYYY/MM/DD"
+        {start}
+        {end}
         on:datepicked={(e) => picked(e, "start")}
       ></DataPicker>
     </div>
@@ -66,6 +68,8 @@
       <DataPicker
         initTime={end.valueOf()}
         format="YYYY/MM/DD"
+        {start}
+        {end}
         on:datepicked={(e) => picked(e, "end")}
       ></DataPicker>
     </div>

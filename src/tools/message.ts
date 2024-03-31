@@ -1,10 +1,11 @@
 import { message } from "../store/index"
 
 
-export default function (msg: string, cb: any) {
+export default function (msg: string, title: string, cb: any) {
     message.set({
         show: true,
         text: msg,
-        fn: cb
+        fn: cb,
+        title: title
     })
 }

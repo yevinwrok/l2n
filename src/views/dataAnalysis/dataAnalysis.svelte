@@ -4,12 +4,12 @@
   import ITL from "./components/inviteTotalLayout.svelte";
   import { getDateAnalysis } from "../../api";
   import { percent } from "../../tools/price";
-    import message from "../../tools/message";
+  import message from "../../tools/message";
   let analysisDetail = {} as any;
   let trend = [];
   let t = [];
   let filter = {};
-  let active: Set<string>;
+  let active: Set<string> = new Set(["total_commission"]);
   let first = false;
   function getData() {
     if (!first) {
@@ -24,13 +24,16 @@
     });
   }
 
-
   function clone(a: any) {
     return JSON.parse(JSON.stringify(a));
   }
 
-  function showRefund(){
-    message("动态退单率:近30天(退单的订单/总订单)<br /><br />*每天上午9点更新最新数据",()=>{})
+  function showRefund() {
+    message(
+      "动态退单率:近30天(退单的订单/总订单)<br /><br />*每天上午9点更新最新数据",
+      "动态退单率",
+      () => {},
+    );
   }
   $: {
     if (active) {
@@ -98,7 +101,7 @@
     </div>
 
     <div class="invite_total_item block_full">
-      <ITL num={analysisDetail.refund_rate} text="退单率" percent />
+      <ITL num={analysisDetail.order_refund_rate} text="退单率" percent />
       <ITL num={analysisDetail.order_refund_cnt} text="退单量(单)" />
       <ITL num={analysisDetail.order_refund_price} text="退单金额(元)" />
     </div>
