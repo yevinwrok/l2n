@@ -58,12 +58,16 @@
 
   async function withdrawTypeClick(wtl: WithdrawTypeListItem) {
     if (wtl.type === ECheckboxSelect.wechat) {
-      const res: any = await call("weChatLogin", {});
-      if (res.code) {
-        const r = await bindWechat(res.code);
-        if (r) {
-          toast("绑定成功");
-          window.location.reload();
+      if (userInfo[wtl.field]) {
+        checkboxSelect = wtl.type;
+      } else {
+        const res: any = await call("weChatLogin", {});
+        if (res.code) {
+          const r = await bindWechat(res.code);
+          if (r) {
+            toast("绑定成功");
+            window.location.reload();
+          }
         }
       }
     } else {
@@ -187,7 +191,7 @@
     {#each withdrawBtnList as money, idx}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class={`withdraw_btn ${withdrawBtnActive === idx ? "active" : ""} ${(idx + 1) % 3=== 0 ? "specific" : ""}`}
+        class={`withdraw_btn ${withdrawBtnActive === idx ? "active" : ""} ${(idx + 1) % 3 === 0 ? "specific" : ""}`}
         on:click={() => (withdrawBtnActive = idx)}
       >
         {money}元
