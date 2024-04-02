@@ -18,18 +18,24 @@
 
   if (!showLayout) {
     p = new Promise((r) => {
-      let start = Date.now();
-      let timer = setInterval(() => {
-        console.log(123123);
-        if ((window as any).WebViewJavascriptBridge) {
-          console.log(1);
-          clearInterval(timer);
-          r(void 0);
-        } else if (Date.now() - start > 3000) {
-          clearInterval(timer);
-          r(void 0);
-        }
-      }, 200);
+      setTimeout(() => {
+        let start = Date.now();
+        let timer = setInterval(() => {
+          console.log("Mount attempt to bridge");
+          if (
+            (window as any).WebViewJavascriptBridge &&
+            (window as any).WebViewJavascriptBridge.callHandler
+          ) {
+            console.log("Mount Bridge Success");
+            clearInterval(timer);
+            r(void 0);
+          } else if (Date.now() - start > 3000) {
+            console.log("Mount Bridge Fail");
+            clearInterval(timer);
+            r(void 0);
+          }
+        }, 200);
+      }, 300);
     });
   } else {
     p = Promise.reject();

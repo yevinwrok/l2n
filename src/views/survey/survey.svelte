@@ -18,7 +18,7 @@
   }
 
   function back() {
-    window.history.go(-1);
+    call("onBack",{})
   }
 
   sl.forEach((item) => {
@@ -161,7 +161,7 @@
     <div class="survey_main_box">
       <p class="survey_main_title">尊敬的爱到家用户：</p>
       <p class="survey_main_text">
-        您好，诚邀您参与本次问卷调查，为了给您提供更优质的服务，我们将占用您几分钟宝贵的时间参与答题，答题后我们将会赠送20元优惠券。每个账号仅可参与一次。
+        您好，诚邀您参与本次问卷调查，为了给您提供更优质的服务，我们将占用您几分钟宝贵的时间参与答题，答题后我们将会赠送10元优惠券。每个账号仅可参与一次。
       </p>
     </div>
     <div class="survey_main_select">

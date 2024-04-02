@@ -35,12 +35,6 @@
   let inviteRecords = [];
   let carouselRef: HTMLElement;
   getInviteRecords().then(async (res) => {
-    // inviteRecords = [
-    //   "李兰兰 昨日通过邀请获得￥3728元",
-    //   "李兰兰 昨日通过邀请获得￥3728元",
-    //   "李兰兰 昨日通过邀请获得￥3728元",
-    //   "李兰兰 昨日通过邀请获得￥3728元",
-    // ];
     if (res.length) {
       let _res = [];
       for (let i = 0; i < 30; i++) {
@@ -159,9 +153,9 @@
       alt=""
       class="carousel_img"
     />
+    <img src="./assets/hybrid/icon_message.png" alt="" class="carousel_icon" />
     {#each inviteRecords as item, index}
       <div class="carousel_item" style="transform: translateY({index * 12}vw);">
-        <img src="./assets/hybrid/icon_message.png" alt="" />
         {item}
       </div>
     {/each}
@@ -375,7 +369,13 @@
       margin: 0 auto;
       display: block;
     }
-
+    .carousel_icon {
+      width: 5vw;
+      height: 5vw;
+      position: absolute;
+      left: 5.8vw;
+      top: 3.4vw;
+    }
     .carousel_item {
       position: absolute;
       top: 0;
@@ -389,11 +389,8 @@
       font-weight: bold;
       font-size: 3vw;
       color: #131923;
-      gap: 3vw;
-      img {
-        width: 5vw;
-        height: 5vw;
-      }
+      margin-bottom: 3vw;
+      padding-left: 6vw;
     }
   }
 </style>
