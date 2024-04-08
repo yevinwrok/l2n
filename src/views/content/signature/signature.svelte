@@ -5,6 +5,7 @@
   import toast from "../../../tools/toast";
   import Loading from "../../../components/loading.svelte";
   import { call } from "../../../bridge";
+  import { baseUrl } from "../../../api/http";
   let article = Content;
   let showSign = false;
   let isLogin = false;
@@ -55,7 +56,7 @@
     formData.append("file", blob, "signature.png");
     formData.append("type", "TECHNICIAN_CONTRACT");
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://aixiang.imoneywalk.com/system/upload_img", true);
+    xhr.open("POST", baseUrl + "/system/upload_img", true);
 
     const callData = {
       url: "/system/upload_img",
