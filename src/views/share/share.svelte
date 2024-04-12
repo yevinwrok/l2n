@@ -12,6 +12,7 @@
   } from "../../api/index";
   import toast from "../../tools/toast";
   import message from "../../tools/message";
+  import { getHost } from "../../tools";
   $: {
     if (!$isMobile) replace("/");
   }
@@ -102,7 +103,7 @@
 </script>
 
 <div class="share">
-  <HyNav title="分享赚钱" hideBack>
+  <HyNav title="分享赚钱" hideBack={getHost() === "tech"}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
       class="header_wallet"
